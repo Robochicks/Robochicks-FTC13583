@@ -30,6 +30,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
+
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -57,10 +58,11 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
 
         // Giving all the motors a specific movement/rotation and speed with the encoder
-        bl.setTargetPosition(2240);
-        br.setTargetPosition(2240);
-        fl.setTargetPosition(2240);
-        fr.setTargetPosition(2240);
+        // Mia 10/29 making the change of a longer path so we can make it to the depot
+        bl.setTargetPosition(4000);
+        br.setTargetPosition(4000);
+        fl.setTargetPosition(4000);
+        fr.setTargetPosition(4000);
 
         // Preparing all the encoders on all of the motors to initiate movement
         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -68,13 +70,14 @@ public class RuckusAutoEncoder extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        bl.setPower(0.75);
-        br.setPower(0.75);
-        fl.setPower(0.75);
-        fr.setPower(0.75);
+        bl.setPower(0.2);
+        br.setPower(0.2);
+        fl.setPower(0.2);
+        fr.setPower(0.2);
 
         while(fl.isBusy() || fr.isBusy() || bl.isBusy() || br.isBusy()) {
             telemetry.addData("Mode" ,"Moving to position");
+            telemetry.addData("Distance", bl.getCurrentPosition());
             telemetry.update();
         }
 
