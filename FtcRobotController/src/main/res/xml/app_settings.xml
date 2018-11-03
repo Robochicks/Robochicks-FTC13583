@@ -47,24 +47,27 @@ See https://developer.android.com/guide/topics/ui/settings.html
     android:title="@string/prefcat_configure_robot">
 
     <EditTextPreference
-        android:defaultValue="Robochicks"
-        android:key="@string/pref_device_name"
+        android:title="@string/prefedit_device_name_rc"
         android:summary="@string/prefedit_device_name_summary_rc"
-        android:title="@string/prefedit_device_name_rc" />
+        android:key="@string/pref_device_name"
+        android:defaultValue=""
+        />
 
     <org.firstinspires.ftc.robotcore.internal.ui.ColorListPreference
+        android:title="@string/prefedit_app_theme_rc"
+        android:summary="@string/prefedit_app_theme_summary_rc"
+        android:key="@string/pref_app_theme"
         android:entries="@array/app_theme_names"
         android:entryValues="@array/app_theme_tokens"
-        android:key="@string/pref_app_theme"
-        android:summary="@string/prefedit_app_theme_summary_rc"
-        android:title="@string/prefedit_app_theme_rc"
-        app:colors="@array/app_theme_colors" />
+        app:colors="@array/app_theme_colors"
+        />
 
     <SwitchPreference
-        android:defaultValue="false"
-        android:key="@string/pref_sound_on_off"
+        android:title="@string/prefedit_sound_on_off"
         android:summary="@string/prefedit_sound_on_off_summary_rc"
-        android:title="@string/prefedit_sound_on_off" />
+        android:key="@string/pref_sound_on_off"
+        android:defaultValue="true"
+        />
 
     <PreferenceScreen
         android:title="@string/titleAdvancedRCSettings"

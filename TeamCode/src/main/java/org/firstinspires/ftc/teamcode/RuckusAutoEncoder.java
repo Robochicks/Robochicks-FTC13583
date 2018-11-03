@@ -59,10 +59,10 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         // Giving all the motors a specific movement/rotation and speed with the encoder
         // Mia 10/29 making the change of a longer path so we can make it to the depot
-        bl.setTargetPosition(4000);
-        br.setTargetPosition(4000);
-        fl.setTargetPosition(4000);
-        fr.setTargetPosition(4000);
+        bl.setTargetPosition(4020);
+        br.setTargetPosition(4020);
+        fl.setTargetPosition(4020);
+        fr.setTargetPosition(4020);
 
         // Preparing all the encoders on all of the motors to initiate movement
         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -86,6 +86,30 @@ public class RuckusAutoEncoder extends LinearOpMode {
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+
+        //Here I am trying to turn the robot
+        bl.setTargetPosition(700);
+        br.setTargetPosition(-700);
+        fl.setTargetPosition(700);
+        fr.setTargetPosition(-700);
+
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        bl.setPower(0.2);
+        br.setPower(0.2);
+        fl.setPower(0.2);
+        fr.setPower(0.2);
+
+        while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
+            telemetry.addData("Mode" , "Moving to position");
+            telemetry.addData( "Distance", bl.getCurrentPosition());
+            telemetry.addData( "Distance", br.getCurrentPosition());
+            telemetry.update();
+        }
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();
