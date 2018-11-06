@@ -97,6 +97,8 @@ public class RuckusDriveJava extends LinearOpMode {
             telemetry.addData("Motors", "Front Left (%.2f), Front Right (%.2f), " +
                             "Back Left (%.2f), Back Right (%.2f)",
                     flPower, frPower, blPower, brPower);
+            telemetry.addData("Mechanisms", "Arm (%.2f), Spin (%.2f), " +
+                armPower, spinPower);
             telemetry.update();
         }
     }

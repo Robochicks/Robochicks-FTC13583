@@ -53,8 +53,15 @@ public class RuckusAutoEncoder extends LinearOpMode {
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        telemetry.addData("EncoderMovement", "Waiting");
+        telemetry.update();
+
         waitForStart();
 
+
+        telemetry.addData("EncoderMovement", "Driving Forward");
+        telemetry.update();
 
 
         // Giving all the motors a specific movement/rotation and speed with the encoder
@@ -81,16 +88,22 @@ public class RuckusAutoEncoder extends LinearOpMode {
             telemetry.update();
         }
 
+        telemetry.addData("EncoderMovement", "Stop");
+        telemetry.update();
+
         //Stopping the encoders to ensure accurate measurements
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        telemetry.addData("EncoderMovement", "Start Turn");
+        telemetry.update();
+
 
         //Here I am trying to turn the robot
         bl.setTargetPosition(700);
-        br.setTargetPosition(-700);
+        br.setTargetPosition(-700);// GET RID OF THE NEGATIVE!
         fl.setTargetPosition(700);
         fr.setTargetPosition(-700);
 
@@ -104,8 +117,13 @@ public class RuckusAutoEncoder extends LinearOpMode {
         fl.setPower(0.2);
         fr.setPower(0.2);
 
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
-            telemetry.addData("Mode" , "Moving to position");
+            telemetry.addData("Mode" , "Turning");
             telemetry.addData( "Distance", bl.getCurrentPosition());
             telemetry.addData( "Distance", br.getCurrentPosition());
             telemetry.update();
