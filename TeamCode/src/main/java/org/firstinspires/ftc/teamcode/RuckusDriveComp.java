@@ -11,10 +11,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.external.Telemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-@TeleOp(name="RuckusDriveJava")
 
-public class RuckusDriveJava extends LinearOpMode {
+@TeleOp(name="Ruckus_Drive_Competition")
+
+public class RuckusDriveComp extends LinearOpMode {
     private Gyroscope imu;
     private Gyroscope imu_1;
     private DcMotor fl;
@@ -64,7 +66,7 @@ public class RuckusDriveJava extends LinearOpMode {
             double frPower;
             double blPower;
             double brPower;
-           // double armPower;
+            double armPower;
             double spinPower;
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -81,13 +83,15 @@ public class RuckusDriveJava extends LinearOpMode {
             frPower   = Range.clip(y1 - x1 + x2, -1.0, 1.0) ;
             blPower   = Range.clip(y1 - x1 - x2, -1.0, 1.0) ;
             brPower   = Range.clip(y1 + x1 - x2, -1.0, 1.0) ;
-            //armPower   = Range.clip( y1Operator, -1.0, 1.0);
+            armPower   = Range.clip( y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
-
-            if (gamepad2.left_bumper == true){
+            if(arm.getCurrentPosition() >= 160 && armPower > 0 || arm.getCurrentPosition() <= 10 && armPower < 0){
+                armPower = 0;
+            }
+            /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    arm.setTargetPosition(200);
+                    arm.setTargetPosition(160);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setPower(0.1);
                     while (arm.isBusy()) {
@@ -100,7 +104,7 @@ public class RuckusDriveJava extends LinearOpMode {
                 }
                 else if ( ArmIsUp == false) {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    arm.setTargetPosition(-200);
+                    arm.setTargetPosition(-160);
                     arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     arm.setPower(0.1);
                     while(arm.isBusy()){
@@ -111,7 +115,7 @@ public class RuckusDriveJava extends LinearOpMode {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     ArmIsUp = true;
                 }
-            }
+            }*/
 
 
 
@@ -119,18 +123,20 @@ public class RuckusDriveJava extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
-            SetDrivePower(flPower, frPower, blPower, brPower, 0, spinPower);
+            SetDrivePower(flPower, frPower, blPower, brPower, armPower, spinPower);
             // Send calculated power to wheels
 
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "Front Left (%.2f), Front Right (%.2f), " +
-                            "Back Left (%.2f), Back Right (%.2f)",
-                    flPower, frPower, blPower, brPower);
-           /* telemetry.addData("Mechanisms", "Arm (%.2f), Spin (%.2f), " +
-                armPower, spinPower);*/
-            telemetry.update();
+            // Show the elapsed game time and wheel power
+            // telemetry.addData("Status", "Run Time: " + runtime.toString());
+           // telemetry.addData("Motors", "Front Left (%d), Front Right (%d), " +
+           //                 "Back Left (%d), Back Right (%d)",
+           //         flPower, frPower, blPower, brPower);
+           // telemetry.addData("Mechanisms", "Arm (%d), Spin (%d), " +
+           //     armPower, spinPower);
+           // telemetry.addData("Raw Inputs (Gamepad 1)","X1 (%.2f), Y1 (.2f), X2 (.2f)",x1,y1,x2);
+            //telemetry.addData("Raw Inputs (Gamepag 2)","Y1 (%.2f), Y2 (%.2f");
+           // telemetry.update();
         }
     }
 
@@ -139,7 +145,7 @@ public class RuckusDriveJava extends LinearOpMode {
         fr.setPower(FrontRightPower);
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
-        //arm.setPower(ArmPower);
+        arm.setPower(ArmPower);
         spin.setPower(SpinPower);
 
     }
