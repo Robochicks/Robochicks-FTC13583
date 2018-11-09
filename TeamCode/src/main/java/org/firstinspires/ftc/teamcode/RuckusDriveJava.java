@@ -26,6 +26,7 @@ public class RuckusDriveJava extends LinearOpMode {
     private Blinker expansion_Hub_3;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor spin;
+    boolean ArmIsUp = true;
 
     @Override
     public void runOpMode() {
@@ -40,7 +41,7 @@ public class RuckusDriveJava extends LinearOpMode {
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
-        spin = hardwareMap.get(DcMotor.class, "spin");
+        spin = hardwareMap.get(DcMotor.class, "Spin");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -63,7 +64,7 @@ public class RuckusDriveJava extends LinearOpMode {
             double frPower;
             double blPower;
             double brPower;
-            double armPower;
+           // double armPower;
             double spinPower;
 
             // Choose to drive using either Tank Mode, or POV Mode
@@ -80,15 +81,45 @@ public class RuckusDriveJava extends LinearOpMode {
             frPower   = Range.clip(y1 - x1 + x2, -1.0, 1.0) ;
             blPower   = Range.clip(y1 - x1 - x2, -1.0, 1.0) ;
             brPower   = Range.clip(y1 + x1 - x2, -1.0, 1.0) ;
-            armPower   = Range.clip( y1Operator, -1.0, 1.0);
+            //armPower   = Range.clip( y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
+
+            if (gamepad2.left_bumper == true){
+                if ( ArmIsUp == true) {
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    arm.setTargetPosition(200);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    arm.setPower(0.1);
+                    while (arm.isBusy()) {
+                        telemetry.addData("Status", "Lowering Arm");
+                        telemetry.update();
+
+                    }
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    ArmIsUp = false;
+                }
+                else if ( ArmIsUp == false) {
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    arm.setTargetPosition(-200);
+                    arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    arm.setPower(0.1);
+                    while(arm.isBusy()){
+                        telemetry.addData("Status", "Raising Arm");
+                        telemetry.update();
+
+                    }
+                    arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    ArmIsUp = true;
+                }
+            }
+
 
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
-            SetDrivePower(flPower, frPower, blPower, brPower, armPower, spinPower);
+            SetDrivePower(flPower, frPower, blPower, brPower, 0, spinPower);
             // Send calculated power to wheels
 
 
@@ -97,8 +128,8 @@ public class RuckusDriveJava extends LinearOpMode {
             telemetry.addData("Motors", "Front Left (%.2f), Front Right (%.2f), " +
                             "Back Left (%.2f), Back Right (%.2f)",
                     flPower, frPower, blPower, brPower);
-            telemetry.addData("Mechanisms", "Arm (%.2f), Spin (%.2f), " +
-                armPower, spinPower);
+           /* telemetry.addData("Mechanisms", "Arm (%.2f), Spin (%.2f), " +
+                armPower, spinPower);*/
             telemetry.update();
         }
     }
@@ -108,7 +139,7 @@ public class RuckusDriveJava extends LinearOpMode {
         fr.setPower(FrontRightPower);
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
-        arm.setPower(ArmPower);
+        //arm.setPower(ArmPower);
         spin.setPower(SpinPower);
 
     }

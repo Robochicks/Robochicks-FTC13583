@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -20,12 +21,14 @@ public class RuckusAutoEncoder extends LinearOpMode {
     private DcMotor bl;
     private DcMotor br;
     private DcMotor arm;
+    private DcMotor spin;
     private Blinker expansion_Hub_2;
     private Blinker expansion_Hub_3;
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
+
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -39,6 +42,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
+        spin = hardwareMap.get(DcMotor.class, "Spin");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -47,90 +51,89 @@ public class RuckusAutoEncoder extends LinearOpMode {
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.FORWARD);
-
-        //Reset all encoders to prevent inaccurate movements; Wait for the game to start (driver presses PLAY)
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        spin.setDirection(DcMotor.Direction.FORWARD);
 
         telemetry.addData("EncoderMovement", "Waiting");
         telemetry.update();
 
         waitForStart();
 
-
         telemetry.addData("EncoderMovement", "Driving Forward");
         telemetry.update();
+        sleep(2000);
+
+        SetDriveDistance(4020, 4020, 4020, 4020);
 
 
-        // Giving all the motors a specific movement/rotation and speed with the encoder
-        // Mia 10/29 making the change of a longer path so we can make it to the depot
-        bl.setTargetPosition(4020);
-        br.setTargetPosition(4020);
-        fl.setTargetPosition(4020);
-        fr.setTargetPosition(4020);
-
-        // Preparing all the encoders on all of the motors to initiate movement
-        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        bl.setPower(0.2);
-        br.setPower(0.2);
-        fl.setPower(0.2);
-        fr.setPower(0.2);
-
-        while(fl.isBusy() || fr.isBusy() || bl.isBusy() || br.isBusy()) {
-            telemetry.addData("Mode" ,"Moving to position");
-            telemetry.addData("Distance", bl.getCurrentPosition());
-            telemetry.update();
-        }
-
-        telemetry.addData("EncoderMovement", "Stop");
+        telemetry.addData("EncoderMovement", "Turning");
         telemetry.update();
 
-        //Stopping the encoders to ensure accurate measurements
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        sleep(2000);
 
-        telemetry.addData("EncoderMovement", "Start Turn");
-        telemetry.update();
+        arm.setPower(-0.2);
+        sleep(4000);
+        arm.setPower(0);
 
+        SetDriveDistance(2000, -2000, 2000, -2000);
+        sleep(3000);
 
-        //Here I am trying to turn the robot
-        bl.setTargetPosition(700);
-        br.setTargetPosition(-700);// GET RID OF THE NEGATIVE!
-        fl.setTargetPosition(700);
-        fr.setTargetPosition(-700);
-
-        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        bl.setPower(0.2);
-        br.setPower(0.2);
-        fl.setPower(0.2);
-        fr.setPower(0.2);
-
-        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
-            telemetry.addData("Mode" , "Turning");
-            telemetry.addData( "Distance", bl.getCurrentPosition());
-            telemetry.addData( "Distance", br.getCurrentPosition());
-            telemetry.update();
-        }
+        SetDriveDistance(4500, 4500, 4500, 4500);
+        sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();
     }
+    private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance){
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        //Here I am trying to turn the robot
+        bl.setTargetPosition(BackLeftDistance);
+        br.setTargetPosition(BackRightDistance);// GET RID OF THE NEGATIVE!
+        fl.setTargetPosition(FrontLeftDistance);
+        fr.setTargetPosition(FrontRightDistance);
+
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        bl.setPower(0.2);
+        br.setPower(0.2);
+        fl.setPower(0.2);
+        fr.setPower(0.2);
+
+        while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
+            telemetry.addData("Mode" , "Moving");
+            telemetry.addData( "Distance BL", bl.getCurrentPosition());
+            telemetry.addData( "Distance BR", br.getCurrentPosition());
+            telemetry.addData( "Distance FL", fl.getCurrentPosition());
+            telemetry.addData( "Distance FR", fr.getCurrentPosition());
+
+            telemetry.addData( "Busy BL", bl.isBusy());
+            telemetry.addData( "Busy BR", br.isBusy());
+            telemetry.addData( "Busy FL", fl.isBusy());
+            telemetry.addData( "Busy FR", fr.isBusy());
+
+           /* telemetry.addData( "Distance",  "Front Left (%.2f), Front Right (%.2f), " +
+                    "Back Left (%.2f), Back Right (%.2f)",
+            fr.getCurrentPosition(),fl.getCurrentPosition(),bl.getCurrentPosition(),br.getCurrentPosition());
+            telemetry.addData("Is It Busy?", "Front Left (%.2f), Front Right (%.2f), " +
+                            "Back Left (%.2f), Back Right (%.2f)",
+                    String.valueOf(fl.isBusy()),  String.valueOf(fr.isBusy()),  String.valueOf(bl.isBusy()), String.valueOf(br.isBusy()));*/
+            telemetry.update();
+        }
+
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        telemetry.addData("EncoderMovement", "Complete");
+        telemetry.update();
+
+
+    }
 }
