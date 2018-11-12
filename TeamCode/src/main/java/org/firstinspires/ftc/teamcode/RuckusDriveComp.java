@@ -85,9 +85,7 @@ public class RuckusDriveComp extends LinearOpMode {
             brPower   = Range.clip(y1 + x1 - x2, -1.0, 1.0) ;
             armPower   = Range.clip( y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
-            if(arm.getCurrentPosition() >= 160 && armPower > 0 || arm.getCurrentPosition() <= 10 && armPower < 0){
-                armPower = 0;
-            }
+
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
