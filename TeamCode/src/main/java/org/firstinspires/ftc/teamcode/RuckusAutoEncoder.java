@@ -62,7 +62,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
         telemetry.update();
         sleep(2000);
 
-        SetDriveDistance(4020, 4020, 4020, 4020);
+        SetDriveDistance(4020, 4020, 4020, 4020, 0.3, 0.3, 0.3, 0.3);
 
 
         telemetry.addData("EncoderMovement", "Turning");
@@ -70,28 +70,27 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         sleep(2000);
 
-        arm.setPower(-0.2);
+        spin.setPower(-0.2);
         sleep(4000);
-        arm.setPower(0);
+        spin.setPower(0);
 
-        SetDriveDistance(2000, -2000, 2000, -2000);
+        SetDriveDistance(2000, -2000, 2000, -2000, 0.3, 0.3, 0.3, 0.3);
         sleep(3000);
 
-        SetDriveDistance(4500, 4500, 4500, 4500);
+        SetDriveDistance(8075, 8075, 8075, 8075, 0.1, 0.1, 0.1, 0.1);
         sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();
     }
-    private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance){
+    private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //Here I am trying to turn the robot
         bl.setTargetPosition(BackLeftDistance);
-        br.setTargetPosition(BackRightDistance);// GET RID OF THE NEGATIVE!
+        br.setTargetPosition(BackRightDistance);
         fl.setTargetPosition(FrontLeftDistance);
         fr.setTargetPosition(FrontRightDistance);
 
@@ -100,10 +99,10 @@ public class RuckusAutoEncoder extends LinearOpMode {
         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        bl.setPower(0.2);
-        br.setPower(0.2);
-        fl.setPower(0.2);
-        fr.setPower(0.2);
+        bl.setPower(BackLeftPower);
+        br.setPower(BackRightPower);
+        fl.setPower(FrontLeftPower);
+        fr.setPower(FrontRightPower);
 
         while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
             telemetry.addData("Mode" , "Moving");
