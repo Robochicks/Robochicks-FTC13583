@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.external.Telemetry;
@@ -18,7 +19,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 public class RuckusDriveComp extends LinearOpMode {
     private Gyroscope imu;
-    private Gyroscope imu_1;
     private DcMotor fl;
     private DcMotor fr;
     private DcMotor bl;
@@ -28,6 +28,7 @@ public class RuckusDriveComp extends LinearOpMode {
     private Blinker expansion_Hub_3;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor spin;
+    private Servo hook;
     boolean ArmIsUp = true;
 
     @Override
@@ -44,6 +45,8 @@ public class RuckusDriveComp extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
         spin = hardwareMap.get(DcMotor.class, "Spin");
+        hook = hardwareMap. get(Servo.class, "hook");
+
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -74,6 +77,7 @@ public class RuckusDriveComp extends LinearOpMode {
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
+            // Gamepad1 is the driver's controller
             double y1 = gamepad1.left_stick_y;
             double x1 = gamepad1.left_stick_x;
             double x2 = gamepad1.right_stick_x;
@@ -85,6 +89,9 @@ public class RuckusDriveComp extends LinearOpMode {
             brPower   = Range.clip(y1 + x1 - x2, -1.0, 1.0) ;
             armPower   = Range.clip( y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
+
+            if (gamepad2. right_bumper == true)
+            {hook.setPosition (180); }
 
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
