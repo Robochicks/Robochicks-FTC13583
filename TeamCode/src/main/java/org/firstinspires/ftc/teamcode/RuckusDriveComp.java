@@ -30,6 +30,10 @@ public class RuckusDriveComp extends LinearOpMode {
     private DcMotor spin;
     private Servo hook;
     boolean ArmIsUp = true;
+    private double hookmax = 1;
+    private double hookmin = 0;
+    private boolean Moving = false;
+
 
     @Override
     public void runOpMode() {
@@ -72,6 +76,12 @@ public class RuckusDriveComp extends LinearOpMode {
             double armPower;
             double spinPower;
 
+            if (hook.getPosition()== hookmax || hook.getPosition()== hookmin) {
+                Moving = false;
+            }
+            else { Moving = true;
+            }
+
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
@@ -83,15 +93,24 @@ public class RuckusDriveComp extends LinearOpMode {
             double x2 = gamepad1.right_stick_x;
             double y1Operator = gamepad2.left_stick_y;
             double y2Operator = gamepad2.right_stick_y;
-            flPower   = Range.clip(y1 + x1 + x2, -1.0, 1.0) ;
-            frPower   = Range.clip(y1 - x1 + x2, -1.0, 1.0) ;
-            blPower   = Range.clip(y1 - x1 - x2, -1.0, 1.0) ;
-            brPower   = Range.clip(y1 + x1 - x2, -1.0, 1.0) ;
-            armPower   = Range.clip( y1Operator, -1.0, 1.0);
+            flPower = Range.clip(y1 + x1 + x2, -1.0, 1.0);
+            frPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
+            blPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
+            brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
+            armPower = Range.clip(y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
 
-            if (gamepad2. right_bumper == true)
-            {hook.setPosition (180); }
+            if (gamepad2.right_bumper == true && Moving == false) {
+                telemetry.addData("Right Bumper", "Pressed");
+                if (hook.getPosition() == hookmax) {
+                    hook.setPosition(hookmin);
+                } else {
+                    hook.setPosition(hookmax);
+                }
+            } else {
+                telemetry.addData("Right Bumper", "Unpressed");
+            }
+            telemetry.update();
 
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
