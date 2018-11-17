@@ -79,6 +79,7 @@ public class RuckusDriveComp extends LinearOpMode {
             double armPower;
             double spinPower;
             double kickstandPower;
+            int kickpos;
 
             if (hook.getPosition()== hookmax || hook.getPosition()== hookmin) {
                 Moving = false;
@@ -116,11 +117,22 @@ public class RuckusDriveComp extends LinearOpMode {
             }
             telemetry.update();
 
-            /*if (gamepad2.left_bumper == true){
-                telemetry.addData ("Left Bumper", "Pressed");
-                kickstand.setMode(DcMotor.RunMode. STOP_AND_RESET_ENCODER);
-                kickstand.setTargetPosition(440);*/
-
+            if (gamepad2.left_bumper == true) {
+                telemetry.addData("Left Bumper", "Pressed");
+                if (kickstand.getCurrentPosition()>0) {
+                    kickpos = -440;
+                } else {
+                    kickpos = 440;
+                }
+                kickstand.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                kickstand.setTargetPosition(kickpos);
+                kickstand.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                kickstand.setPower(0.5);
+                while (kickstand.isBusy()) {
+                    telemetry.addData("Kickstand", "Moving");
+                    telemetry.update();
+                }
+            }
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
