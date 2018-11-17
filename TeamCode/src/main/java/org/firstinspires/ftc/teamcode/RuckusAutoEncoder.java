@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gyroscope;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.external.Telemetry;
@@ -26,10 +25,6 @@ public class RuckusAutoEncoder extends LinearOpMode {
     private Blinker expansion_Hub_2;
     private Blinker expansion_Hub_3;
     private ElapsedTime runtime = new ElapsedTime();
-    private double hookmax = 1;
-    private double hookmin = 0;
-    private boolean moving = false;
-    private Servo hook;
 
     @Override
     public void runOpMode() {
@@ -48,7 +43,6 @@ public class RuckusAutoEncoder extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
         spin = hardwareMap.get(DcMotor.class, "Spin");
-        hook = hardwareMap. get(Servo.class, "hook");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -66,13 +60,6 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         telemetry.addData("EncoderMovement", "Driving Forward");
         telemetry.update();
-
-        //Lowering the robot to the floor
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(1000);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        arm.setPower(0.2);
-
         sleep(1000);
 
         SetDriveDistance(4020, 4020, 4020, 4020, 0.3, 0.3, 0.3, 0.3);
@@ -84,14 +71,14 @@ public class RuckusAutoEncoder extends LinearOpMode {
         sleep(1000);
 
         spin.setPower(-0.2);
-        sleep(1000);
+        sleep(2000);
         spin.setPower(0);
 
         SetDriveDistance(2000, -2000, 2000, -2000, 0.3, 0.3, 0.3, 0.3);
-        sleep(3000);
+        sleep(1000);
 
         SetDriveDistance(8075, 8075, 8075, 8075, 0.1, 0.1, 0.1, 0.1);
-        sleep(5000);
+        //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();

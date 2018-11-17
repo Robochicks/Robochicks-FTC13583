@@ -48,6 +48,8 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
         spin = hardwareMap.get(DcMotor.class, "Spin");
         hook = hardwareMap.get(Servo.class, "hook");
 
+        waitForStart();
+
         telemetry.addData("Movement", "Lowering");
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -63,6 +65,7 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
         }
 
         hook.setPosition(0);
+        sleep(1500);
 
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(-1000);

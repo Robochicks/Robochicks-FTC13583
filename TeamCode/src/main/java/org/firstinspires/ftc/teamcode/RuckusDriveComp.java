@@ -79,7 +79,8 @@ public class RuckusDriveComp extends LinearOpMode {
             double armPower;
             double spinPower;
             double kickstandPower;
-            int kickpos;
+            //int kickpos;
+            double kickPower;
 
             if (hook.getPosition()== hookmax || hook.getPosition()== hookmin) {
                 Moving = false;
@@ -103,8 +104,10 @@ public class RuckusDriveComp extends LinearOpMode {
             blPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
             brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
             armPower = Range.clip(y1Operator, -1.0, 1.0);
-            spinPower = Range.clip(y2Operator, -1.0, 1.0);
+            //spinPower = Range.clip(y2Operator, -1.0, 1.0);
+            kickPower = Range.clip(y2Operator,-.1,1.0);
 
+            //This controls the hook. Pressing the bumper once will either open or close it.
             if (gamepad2.right_bumper == true && Moving == false) {
                 telemetry.addData("Right Bumper", "Pressed");
                 if (hook.getPosition() == hookmax) {
@@ -117,7 +120,7 @@ public class RuckusDriveComp extends LinearOpMode {
             }
             telemetry.update();
 
-            if (gamepad2.left_bumper == true) {
+            /*if (gamepad2.left_bumper == true) {
                 telemetry.addData("Left Bumper", "Pressed");
                 if (kickstand.getCurrentPosition()>0) {
                     kickpos = -440;
@@ -132,7 +135,7 @@ public class RuckusDriveComp extends LinearOpMode {
                     telemetry.addData("Kickstand", "Moving");
                     telemetry.update();
                 }
-            }
+            }*/
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
                     arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -168,7 +171,7 @@ public class RuckusDriveComp extends LinearOpMode {
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
             // leftPower  = -gamepad1.left_stick_y ;
             // rightPower = -gamepad1.right_stick_y ;
-            SetDrivePower(flPower, frPower, blPower, brPower, armPower, spinPower);
+            SetDrivePower(flPower, frPower, blPower, brPower, armPower, 0,kickPower);
             // Send calculated power to wheels
 
 
@@ -185,14 +188,14 @@ public class RuckusDriveComp extends LinearOpMode {
         }
     }
 
-    private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double ArmPower, double SpinPower){
+    private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double ArmPower, double SpinPower, double KickPower){
         fl.setPower(FrontLeftPower);
         fr.setPower(FrontRightPower);
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
         arm.setPower(ArmPower);
         spin.setPower(SpinPower);
-
+        kickstand.setPower(KickPower);
     }
 
 }
