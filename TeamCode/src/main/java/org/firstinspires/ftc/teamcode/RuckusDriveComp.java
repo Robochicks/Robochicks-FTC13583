@@ -97,7 +97,7 @@ public class RuckusDriveComp extends LinearOpMode {
             frPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
             blPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
             brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
-            armPower = Range.clip(y1Operator, -1.0, 1.0);
+            armPower = Range.clip(y1Operator, -0.25, 0.25);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
 
             if (gamepad2.right_bumper == true && Moving == false) {
