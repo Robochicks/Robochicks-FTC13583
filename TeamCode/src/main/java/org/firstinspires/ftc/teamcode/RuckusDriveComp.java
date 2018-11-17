@@ -33,6 +33,9 @@ public class RuckusDriveComp extends LinearOpMode {
     private double hookmax = 1;
     private double hookmin = 0;
     private boolean Moving = false;
+    private DcMotor kickstand;
+    private double kickstandmax = 450;
+
 
 
     @Override
@@ -50,7 +53,7 @@ public class RuckusDriveComp extends LinearOpMode {
         arm = hardwareMap.get(DcMotor.class, "Arm");
         spin = hardwareMap.get(DcMotor.class, "Spin");
         hook = hardwareMap. get(Servo.class, "hook");
-
+        kickstand = hardwareMap.get(DcMotor.class, "Kickstand");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -75,6 +78,7 @@ public class RuckusDriveComp extends LinearOpMode {
             double brPower;
             double armPower;
             double spinPower;
+            double kickstandPower;
 
             if (hook.getPosition()== hookmax || hook.getPosition()== hookmin) {
                 Moving = false;
@@ -97,7 +101,7 @@ public class RuckusDriveComp extends LinearOpMode {
             frPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
             blPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
             brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
-            armPower = Range.clip(y1Operator, -0.25, 0.25);
+            armPower = Range.clip(y1Operator, -1.0, 1.0);
             spinPower = Range.clip(y2Operator, -1.0, 1.0);
 
             if (gamepad2.right_bumper == true && Moving == false) {
@@ -111,6 +115,11 @@ public class RuckusDriveComp extends LinearOpMode {
                 telemetry.addData("Right Bumper", "Unpressed");
             }
             telemetry.update();
+
+            /*if (gamepad2.left_bumper == true){
+                telemetry.addData ("Left Bumper", "Pressed");
+                kickstand.setMode(DcMotor.RunMode. STOP_AND_RESET_ENCODER);
+                kickstand.setTargetPosition(440);*/
 
             /*if (gamepad2.left_bumper == true){
                 if ( ArmIsUp == true) {
