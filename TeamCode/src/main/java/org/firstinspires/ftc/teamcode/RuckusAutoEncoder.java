@@ -66,7 +66,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
         telemetry.update();
         sleep(1000);
 
-        SetDriveDistance(4020, 4020, 4020, 4020, 0.6, 0.6, 0.6, 0.6);
+        SetDriveDistance(4673, 4673, 4673, 4673, 0.6, 0.6, 0.6, 0.6);
 
 
         telemetry.addData("EncoderMovement", "Turning");
@@ -78,10 +78,10 @@ public class RuckusAutoEncoder extends LinearOpMode {
         sleep(2000);
         spin.setPower(0);
 
-        SetDriveDistance(2150, -2150, 2150, -2150, 0.3, 0.3, 0.3, 0.3);
+        SetDriveDistance(2150, -2150, 2150, -2150, 0.3, 0.3, 0.3, 0.3);//Turn less
         sleep(1000);
 
-        SetDriveDistance(4500, 4500, 4500, 4500, 0.1, 0.1, 0.1, 0.1);
+        SetDriveDistance(4500, 4500, 4500, 4500, 0.1, 0.1, 0.1, 0.1);//Measure new distance
         //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
