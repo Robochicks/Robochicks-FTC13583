@@ -66,6 +66,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
         telemetry.update();
         sleep(1000);
 
+        // driving forward to the depot
         SetDriveDistance(4673, 4673, 4673, 4673, 0.6, 0.6, 0.6, 0.6);
 
 
@@ -74,14 +75,17 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         sleep(1000);
 
+        //Ejecting the marker
         spin.setPower(-0.2);
         sleep(2000);
         spin.setPower(0);
 
-        SetDriveDistance(2150, -2150, 2150, -2150, 0.3, 0.3, 0.3, 0.3);//Turn less
+        //Turning the robot
+        SetDriveDistance(2025, -2025, 2025, -2025, 0.3, 0.3, 0.3, 0.3);//Turn less
         sleep(1000);
 
-        SetDriveDistance(4500, 4500, 4500, 4500, 0.1, 0.1, 0.1, 0.1);//Measure new distance
+        //Driving forward to the crater
+        SetDriveDistance(4700, 4700, 4700, 4700, 0.1, 0.1, 0.1, 0.1);//Measure new distance
         //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
