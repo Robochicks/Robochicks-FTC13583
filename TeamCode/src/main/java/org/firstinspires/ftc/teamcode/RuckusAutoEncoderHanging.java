@@ -1,11 +1,15 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.text.method.Touch;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Blinker;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 //import com.qualcomm.robotcore.external.Telemetry;
 
@@ -28,6 +32,8 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
     private boolean moving = false;
     private Servo hook;
 
+    private DigitalChannel touch;
+    private boolean limitswitch = false;
     @Override
     public void runOpMode() {
 
@@ -47,12 +53,27 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
         arm = hardwareMap.get(DcMotor.class, "Arm");
         spin = hardwareMap.get(DcMotor.class, "Spin");
         hook = hardwareMap.get(Servo.class, "hook");
+        touch = hardwareMap.get(DigitalChannel.class,"Touch");
 
         waitForStart();
+        arm.setPower(0.3);
+        while (limitswitch == false) {
+            telemetry.addData("arm", "Moving Down");
+            telemetry.update();
+            touch.getState();
+            if (touch.getState() == false) {
+               limitswitch = true;
+               telemetry.addData("arm", "Stopped");
+               telemetry.update();
+               arm.setPower(0.0);
+            }
+        }
 
-        telemetry.addData("Movement", "Lowering");
 
-        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        //telemetry.addData("Movement", "Lowering");
+
+       /* arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setTargetPosition(1000);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(0.2);
@@ -80,7 +101,7 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
         }
 
         telemetry.addData("EncoderMovement", "Complete");
-        telemetry.update();
+        telemetry.update();*/
     }
 
     private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower) {
