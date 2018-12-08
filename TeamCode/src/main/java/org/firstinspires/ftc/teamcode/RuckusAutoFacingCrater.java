@@ -66,33 +66,41 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         sleep(1000);
 
         // Movement A (drive forward from shuttle)
-        SetDriveDistance(1360, 1360, 1360, 1360, 0.4, 0.4, 0.4, 0.4);
+        SetDriveDistance(1460, 1460, 1460, 1460, 0.4, 0.4, 0.4, 0.4);
         sleep(1000);
 
-        // Spit out marker
+        /*Spit out marker
         spin.setPower(-0.2);
         sleep(2000);
-        spin.setPower(0);
+        spin.setPower(0);**/
 
         // Movement A ~> B (turn)
         telemetry.addData("EncoderMovement", "Turning");
         telemetry.update();
 
-        SetDriveDistance(-3226, 3225, -3226, 3226, 0.3, 0.3, 0.3, 0.3);//Turn less
+        SetDriveDistance(-1469, 1469, -1469, 1469, 0.3, 0.3, 0.3, 0.3);//Turn less
         sleep(1000);
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();
 
         // Movement B (move forward)
-        SetDriveDistance(2720, 2720, 2720, 2720, 0.5, 0.5, 0.5, 0.5);//Measure new distance
+        SetDriveDistance(3384, 3384, 3384, 3384, 0.2, 0.2, 0.2, 0.2);//Measure new distance
         //sleep(5000);
 
         //telemetry.addData("EncoderMovement, ")
         // Movement B ~> C (turn)
-        SetDriveDistance(-4300, 4300, -4300, 4300, 0.3,0.3, 0.3, 0.3);
+        SetDriveDistance(-750, 750, -750, 750, 0.2,0.2, 0.2, 0.2);
 
-        //Movement C 
+        //Movement C (move forward)
+        SetDriveDistance(3564, 3564, 3564, 3564, 0.2,0.2,0.2,0.2);
+
+        //Movement D (180 turn)
+        SetDriveDistance(-2869, 2869, -2869,2869,0.4,0.4,0.4,0.4);
+
+        //Movement E (move forward)
+        SetDriveDistance(6091, 6091,6091,6091,0.4, 0.4, 0.4, 0.4);
+
 
     }
     private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
