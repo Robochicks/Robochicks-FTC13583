@@ -22,9 +22,9 @@ public class RuckusAutoEncoder extends LinearOpMode {
     private DcMotor br;
     private DcMotor arm;
     private DcMotor spin;
-    private Blinker expansion_Hub_2;
-    private Blinker expansion_Hub_3;
-    private ElapsedTime runtime = new ElapsedTime();
+   // private Blinker expansion_Hub_2;
+   // private Blinker expansion_Hub_3;
+    //private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -64,28 +64,24 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         telemetry.addData("EncoderMovement", "Driving Forward");
         telemetry.update();
-        sleep(1000);
 
         // driving forward to the depot
-        SetDriveDistance(4673, 4673, 4673, 4673, 0.6, 0.6, 0.6, 0.6);
+        SetDriveDistance(4200, 4200, 4200, 4200, 0.3, 0.3, 0.3, 0.3);
 
 
         telemetry.addData("EncoderMovement", "Turning");
         telemetry.update();
 
-        sleep(1000);
-
         //Ejecting the marker
-        spin.setPower(-0.2);
-        sleep(2000);
+        spin.setPower(-1);
+        sleep(1000);
         spin.setPower(0);
 
         //Turning the robot
         SetDriveDistance(2025, -2025, 2025, -2025, 0.3, 0.3, 0.3, 0.3);//Turn less
-        sleep(1000);
 
         //Driving forward to the crater
-        SetDriveDistance(4700, 4700, 4700, 4700, 0.1, 0.1, 0.1, 0.1);//Measure new distance
+        SetDriveDistance(4700, 4700, 4700, 4700, 0.3, 0.3, 0.3, 0.3);//Measure new distance
         //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");

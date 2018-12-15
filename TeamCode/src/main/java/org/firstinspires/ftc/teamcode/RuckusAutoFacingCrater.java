@@ -21,9 +21,9 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
     private DcMotor br;
     private DcMotor arm;
     private DcMotor spin;
-    private Blinker expansion_Hub_2;
-    private Blinker expansion_Hub_3;
-    private ElapsedTime runtime = new ElapsedTime();
+  //  private Blinker expansion_Hub_2;
+   // private Blinker expansion_Hub_3;
+    //private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -85,20 +85,25 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         telemetry.update();
 
         // Movement B (move forward)
-        SetDriveDistance(3384, 3384, 3384, 3384, 0.2, 0.2, 0.2, 0.2);//Measure new distance
+        SetDriveDistance(3384, 3384, 3384, 3384, 0.4, 0.4, 0.4, 0.4);//Measure new distance
         //sleep(5000);
 
         //telemetry.addData("EncoderMovement, ")
         // Movement B ~> C (turn)
-        SetDriveDistance(-750, 750, -750, 750, 0.2,0.2, 0.2, 0.2);
+        SetDriveDistance(-750, 750, -750, 750, 0.4,0.4, 0.4, 0.4);
 
-        //Movement C (move forward)
-        SetDriveDistance(3564, 3564, 3564, 3564, 0.2,0.2,0.2,0.2);
+        //Movement C (move forward towards depot)
+        SetDriveDistance(3200, 3200, 3200, 3200, 0.2,0.2,0.2,0.2);
+
+        //Ejecting the marker
+        spin.setPower(-1);
+        sleep(1000);
+        spin.setPower(0);
 
         //Movement D (180 turn)
         SetDriveDistance(-2869, 2869, -2869,2869,0.4,0.4,0.4,0.4);
 
-        //Movement E (move forward)
+        //Movement E (move forward into crater)
         SetDriveDistance(6091, 6091,6091,6091,0.4, 0.4, 0.4, 0.4);
 
 
