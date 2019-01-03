@@ -78,10 +78,10 @@ public class RuckusAutoEncoder extends LinearOpMode {
         spin.setPower(0);
 
         //Turning the robot
-        SetDriveDistance(2025, -2025, 2025, -2025, 0.3, 0.3, 0.3, 0.3);//Turn less
+        SetDriveDistance(2025, -2025, 2025, -2025, 0.6, 0.6, 0.6, 0.6);//Turn less
 
         //Driving forward to the crater
-        SetDriveDistance(4700, 4700, 4700, 4700, 0.3, 0.3, 0.3, 0.3);//Measure new distance
+        SetDriveDistance(4700, 4700, 4700, 4700, 0.6, 0.6, 0.6, 0.6);//Measure new distance
         //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");

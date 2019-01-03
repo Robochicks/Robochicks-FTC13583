@@ -63,11 +63,11 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         telemetry.addData("EncoderMovement", "Driving Forward");
         telemetry.update();
-        sleep(1000);
+        //sleep(1000);
 
         // Movement A (drive forward from shuttle)
-        SetDriveDistance(1460, 1460, 1460, 1460, 0.4, 0.4, 0.4, 0.4);
-        sleep(1000);
+        SetDriveDistance(1460, 1460, 1460, 1460, 0.8, 0.8, 0.8, 0.8);
+        //sleep(1000);
 
         /*Spit out marker
         spin.setPower(-0.2);
@@ -78,22 +78,22 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         telemetry.addData("EncoderMovement", "Turning");
         telemetry.update();
 
-        SetDriveDistance(-1469, 1469, -1469, 1469, 0.3, 0.3, 0.3, 0.3);//Turn less
-        sleep(1000);
+        SetDriveDistance(-1469, 1469, -1469, 1469, 0.6, 0.6, 0.6, 0.6);//Turn less
+        //sleep(1000);
 
         telemetry.addData("EncoderMovement", "Complete");
         telemetry.update();
 
         // Movement B (move forward)
-        SetDriveDistance(3384, 3384, 3384, 3384, 0.4, 0.4, 0.4, 0.4);//Measure new distance
+        SetDriveDistance(3384, 3384, 3384, 3384, 0.8, 0.8, 0.8, 0.8);//Measure new distance
         //sleep(5000);
 
         //telemetry.addData("EncoderMovement, ")
         // Movement B ~> C (turn)
-        SetDriveDistance(-750, 750, -750, 750, 0.4,0.4, 0.4, 0.4);
+        SetDriveDistance(-750, 750, -750, 750, 0.8,0.8, 0.8, 0.8);
 
         //Movement C (move forward towards depot)
-        SetDriveDistance(3200, 3200, 3200, 3200, 0.2,0.2,0.2,0.2);
+        SetDriveDistance(3200, 3200, 3200, 3200, 0.4,0.4,0.4,0.4);
 
         //Ejecting the marker
         spin.setPower(-1);
@@ -101,10 +101,10 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         spin.setPower(0);
 
         //Movement D (180 turn)
-        SetDriveDistance(-2869, 2869, -2869,2869,0.4,0.4,0.4,0.4);
+        SetDriveDistance(-2869, 2869, -2869,2869,0.8,0.8,0.8,0.8);
 
         //Movement E (move forward into crater)
-        SetDriveDistance(6091, 6091,6091,6091,0.4, 0.4, 0.4, 0.4);
+        SetDriveDistance(6091, 6091,6091,6091,0.8, 0.8, 0.8, 0.8);
 
 
     }
