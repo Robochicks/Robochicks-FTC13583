@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 //import com.qualcomm.robotcore.external.Telemetry;
 
-@Autonomous(name="RuckusAutoEncoder")
+@Autonomous(name="RuckusAutoDepotNoCrater")
 
 public class RukusAutoDepotNoCrater extends LinearOpMode {
     private Gyroscope imu;
@@ -61,7 +61,7 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
         telemetry.update();
 
         // driving forward to the depot
-        SetDriveDistance(4200, 4200, 4200, 4200, 0.3, 0.3, 0.3, 0.3);
+        SetDriveDistance(4200, 4200, 4200, 4200, 0.8, 0.8, 0.8, 0.8);
 
 
         telemetry.addData("EncoderMovement", "Turning");
@@ -71,6 +71,9 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
         spin.setPower(-1);
         sleep(1000);
         spin.setPower(0);
+
+        //Drive Backwards
+        SetDriveDistance(-2100, -2100,-2100,-2100, 0.8,0.8,0.8,0.8);
 
     }
     private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){

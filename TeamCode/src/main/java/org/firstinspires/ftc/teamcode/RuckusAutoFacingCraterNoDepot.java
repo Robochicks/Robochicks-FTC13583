@@ -63,7 +63,7 @@ public class RuckusAutoFacingCraterNoDepot extends LinearOpMode {
         sleep(1000);
 
         // Movement A (drive forward from shuttle)
-        SetDriveDistance(2460, 2460, 2460, 2460, 0.4, 0.4, 0.4, 0.4);
+        SetDriveDistance(4200, 4200, 4200, 4200, 0.8, 0.8, 0.8, 0.8);
     }
     private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

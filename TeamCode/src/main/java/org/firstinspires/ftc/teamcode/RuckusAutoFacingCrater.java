@@ -78,7 +78,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         telemetry.addData("EncoderMovement", "Turning");
         telemetry.update();
 
-        SetDriveDistance(-1469, 1469, -1469, 1469, 0.6, 0.6, 0.6, 0.6);//Turn less
+        SetDriveDistance(-1469, 1469, -1469, 1469, 0.4, 0.4, 0.4, 0.4);//Turn less
         //sleep(1000);
 
         telemetry.addData("EncoderMovement", "Complete");
@@ -90,10 +90,10 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         //telemetry.addData("EncoderMovement, ")
         // Movement B ~> C (turn)
-        SetDriveDistance(-750, 750, -750, 750, 0.8,0.8, 0.8, 0.8);
+        SetDriveDistance(-750, 750, -750, 750, 0.4,0.4, 0.4, 0.4);
 
         //Movement C (move forward towards depot)
-        SetDriveDistance(3200, 3200, 3200, 3200, 0.4,0.4,0.4,0.4);
+        SetDriveDistance(3200, 3200, 3200, 3200, 0.8,0.8,0.8,0.8);
 
         //Ejecting the marker
         spin.setPower(-1);
@@ -101,10 +101,10 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         spin.setPower(0);
 
         //Movement D (180 turn)
-        SetDriveDistance(-2869, 2869, -2869,2869,0.8,0.8,0.8,0.8);
+        SetDriveDistance(-2869, 2869, -2869,2869,0.4,0.4,0.4,0.4);
 
         //Movement E (move forward into crater)
-        SetDriveDistance(6091, 6091,6091,6091,0.8, 0.8, 0.8, 0.8);
+        SetDriveDistance(7091, 7091,7091,7091,0.8, 0.8, 0.8, 0.8);
 
 
     }
