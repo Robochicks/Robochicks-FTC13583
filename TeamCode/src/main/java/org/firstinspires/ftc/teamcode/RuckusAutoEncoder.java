@@ -9,19 +9,24 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.*;
 //import com.qualcomm.robotcore.external.Telemetry;
 
 @Autonomous(name="RuckusAutoEncoder")
 
 public class RuckusAutoEncoder extends LinearOpMode {
-    private Gyroscope imu;
-    private Gyroscope imu_1;
+   // private Gyroscope imu;
+   // private Gyroscope imu_1;
     private DcMotor fl;
     private DcMotor fr;
     private DcMotor bl;
     private DcMotor br;
     private DcMotor arm;
     private DcMotor spin;
+    private BNO055IMU imu;
+    private Orientation lastAndle = new Orientation();
+    private double globalAngle, power = .30, correction;
    // private Blinker expansion_Hub_2;
    // private Blinker expansion_Hub_3;
     //private ElapsedTime runtime = new ElapsedTime();
@@ -43,6 +48,23 @@ public class RuckusAutoEncoder extends LinearOpMode {
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
         spin = hardwareMap.get(DcMotor.class, "Spin");
+
+        imu = hardwareMap.get(BNO055IMU.class,"imu");
+        BNO055IMU.Parameters params = new BNO055IMU.Parameters();
+        params.mode                = BNO055IMU.SensorMode.IMU;
+        params.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        params.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        params.loggingEnabled      = false;
+        imu.initialize(params);
+        telemetry.addData("Mode", "calibrating...");
+        telemetry.update();
+        while (!isStopRequested() && !imu.isGyroCalibrated())
+        {
+            sleep(50);
+            idle();
+        }
+        telemetry.addData("Mode", "calibrated, waiting...");
+        telemetry.update();
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -78,13 +100,64 @@ public class RuckusAutoEncoder extends LinearOpMode {
         spin.setPower(0);
 
         //Turning the robot
-        SetDriveDistance(2025, -2025, 2025, -2025, 0.4, 0.4, 0.4, 0.4);//Turn less
+        //SetDriveDistance(2025, -2025, 2025, -2025, 0.4, 0.4, 0.4, 0.4);
+
+        SetTurn(0.4, -120);
 
         //Driving forward to the crater
         SetDriveDistance(5700, 5700, 5700, 5700, 0.8, 0.8, 0.8, 0.8);//Measure new distance
         //sleep(5000);
 
         telemetry.addData("EncoderMovement", "Complete");
+        telemetry.update();
+    }
+    private void SetTurn (double Power, double Angle){
+       double LeftPower, RightPower;
+        if (Angle > 0){
+            LeftPower = -Power;
+            RightPower = Power;
+        }
+        else if(Angle < 0){
+            LeftPower = Power;
+            RightPower = -Power;
+        }
+        else{
+            LeftPower = Power;
+            RightPower = Power;
+        }
+
+        fr.setPower(RightPower);
+        fl.setPower(LeftPower);
+        br.setPower(RightPower);
+        bl.setPower(LeftPower);
+        Orientation Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        double Heading = Angles.firstAngle;
+        if(Angle < 0){
+            while(Heading > Angle){
+                Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                Heading = Angles.firstAngle;
+                telemetry.addData("EncoderMovement", "Turning Right");
+                telemetry.addData("Turn Info", LeftPower + "," + RightPower);
+                telemetry.addData("Turn Info2", Angle + "," + Heading);
+                telemetry.update();
+            }
+        }
+        else if(Angle > 0){
+            while(Heading < Angle){
+                Angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                Heading = Angles.firstAngle;
+                telemetry.addData("EncoderMovement", "Turning Left");
+                telemetry.addData("Turn Info", LeftPower + "," + RightPower);
+                telemetry.addData("Turn Info2", Angle + "," + Heading);
+                telemetry.update();
+            }
+        }
+        fr.setPower(0);
+        fl.setPower(0);
+        br.setPower(0);
+        bl.setPower(0);
+
+        telemetry.addData("EncoderMovement", "Turn Complete");
         telemetry.update();
     }
     private void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
