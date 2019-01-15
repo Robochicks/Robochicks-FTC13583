@@ -108,6 +108,8 @@ public class RuckusDriveComp extends LinearOpMode {
             double x2 = gamepad1.right_stick_x;
             double y1Operator = gamepad2.left_stick_y;
             int  bumper = Boolean.compare(gamepad2.right_bumper,false) - Boolean.compare(gamepad2.left_bumper,false) ;
+
+
             //double y2Operator = gamepad2.right_stick_y;
             flPower = Range.clip(y1 + x1 + x2, -1.0, 1.0);
             frPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
@@ -116,6 +118,24 @@ public class RuckusDriveComp extends LinearOpMode {
             armPower = Range.clip(y1Operator, -1.0, 1.0);
             spinPower = Range.clip(bumper, -1.0, 1.0);
             //kickPower = Range.clip(y2Operator,-.1,1.0);
+
+            // Left and right bumpers control shifting movements
+             if (gamepad1.right_bumper == true) {
+                telemetry.addData("Right Bumper", "Pressed");
+                frPower =(0.7);
+                blPower =(0.7);
+                flPower =(0.0);
+                brPower =(0.0);
+                }
+
+             if (gamepad1.left_bumper ==true) {
+                telemetry.addData("Left Bumper", "Pressed");
+                brPower =(0.7);
+                flPower =(0.7);
+                blPower =(0.0);
+                frPower =(0.0);
+                }
+
 
             //This controls the hook. Pressing the bumper once will either open or close it.
            /* if (gamepad2.right_bumper == true && Moving == false) {
