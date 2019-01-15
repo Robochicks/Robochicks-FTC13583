@@ -112,6 +112,10 @@ public class RuckusAutoEncoder extends LinearOpMode {
         telemetry.update();
     }
     private void SetTurn (double Power, double Angle){
+        bl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        br.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fl.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fr.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        double LeftPower, RightPower;
         if (Angle > 0){
             LeftPower = -Power;
@@ -156,6 +160,11 @@ public class RuckusAutoEncoder extends LinearOpMode {
         fl.setPower(0);
         br.setPower(0);
         bl.setPower(0);
+
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         telemetry.addData("EncoderMovement", "Turn Complete");
         telemetry.update();
