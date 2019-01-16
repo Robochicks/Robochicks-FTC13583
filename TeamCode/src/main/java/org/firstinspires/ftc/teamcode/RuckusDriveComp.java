@@ -120,20 +120,20 @@ public class RuckusDriveComp extends LinearOpMode {
             //kickPower = Range.clip(y2Operator,-.1,1.0);
 
             // Left and right bumpers control shifting movements
-             if (gamepad1.right_bumper == true) {
-                telemetry.addData("Right Bumper", "Pressed");
+             if (gamepad1.left_bumper == true) {
+                telemetry.addData("Left Bumper", "Pressed");
                 frPower =(0.7);
                 blPower =(0.7);
-                flPower =(0.0);
-                brPower =(0.0);
+                flPower =(-0.7);
+                brPower =(-0.7);
                 }
 
-             if (gamepad1.left_bumper ==true) {
-                telemetry.addData("Left Bumper", "Pressed");
+             if (gamepad1.right_bumper ==true) {
+                telemetry.addData("Right Bumper", "Pressed");
                 brPower =(0.7);
                 flPower =(0.7);
-                blPower =(0.0);
-                frPower =(0.0);
+                blPower =(-0.7);
+                frPower =(-0.7);
                 }
 
 
@@ -227,7 +227,7 @@ public class RuckusDriveComp extends LinearOpMode {
            // telemetry.addData("Mechanisms", "Arm (%d), Spin (%d), " +
            //     armPower, spinPower);
            // telemetry.addData("Raw Inputs (Gamepad 1)","X1 (%.2f), Y1 (.2f), X2 (.2f)",x1,y1,x2);
-            //telemetry.addData("Raw Inputs (Gamepag 2)","Y1 (%.2f), Y2 (%.2f");
+            //telemetry.addData("Raw Inputs (Gamepad 2)","Y1 (%.2f), Y2 (%.2f");
             telemetry.update();
         }
     }
