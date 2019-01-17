@@ -16,7 +16,7 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
     private DcMotor bl;
     private DcMotor br;
     private DcMotor arm;
-    private DcMotor spin;
+    private DcMotor Spin;
    // private Blinker expansion_Hub_2;
    // private Blinker expansion_Hub_3;
     //private ElapsedTime runtime = new ElapsedTime();
@@ -37,7 +37,7 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
         arm = hardwareMap.get(DcMotor.class, "Arm");
-        spin = hardwareMap.get(DcMotor.class, "Spin");
+        Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -46,7 +46,7 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.FORWARD);
         arm.setDirection(DcMotor.Direction.FORWARD);
-        spin.setDirection(DcMotor.Direction.FORWARD);
+        Spin.setDirection(DcMotor.Direction.FORWARD);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -68,9 +68,9 @@ public class RukusAutoDepotNoCrater extends LinearOpMode {
         telemetry.update();
 
         //Ejecting the marker
-        spin.setPower(-1);
+        Spin.setPower(-1);
         sleep(1000);
-        spin.setPower(0);
+        Spin.setPower(0);
 
         //Drive Backwards
         SetDriveDistance(-2100, -2100,-2100,-2100, 0.8,0.8,0.8,0.8);

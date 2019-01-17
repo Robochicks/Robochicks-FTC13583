@@ -56,7 +56,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
     private DcMotor arm;
 
-    private DcMotor spin;
+    private DcMotor Spin;
 
     private Orientation lastAndle = new Orientation();
 
@@ -102,7 +102,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         arm = hardwareMap.get(DcMotor.class, "Arm");
 
-        spin = hardwareMap.get(DcMotor.class, "Spin");
+        Spin = hardwareMap.get(DcMotor.class, "Spin");
 
 
 
@@ -154,7 +154,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         arm.setDirection(DcMotor.Direction.FORWARD);
 
-        spin.setDirection(DcMotor.Direction.FORWARD);
+        Spin.setDirection(DcMotor.Direction.FORWARD);
 
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -234,11 +234,11 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         //Ejecting the marker
 
-        spin.setPower(-1);
+        Spin.setPower(-1);
 
         sleep(1000);
 
-        spin.setPower(0);
+        Spin.setPower(0);
 
 
 
