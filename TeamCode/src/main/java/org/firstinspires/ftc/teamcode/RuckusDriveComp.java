@@ -107,7 +107,7 @@ public class RuckusDriveComp extends LinearOpMode {
             blPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
             brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
             liftPower = Range.clip(Opy1, -1.0, 1.0);
-            tiltPower = Range.clip(Opy2, -1.0, 1.0);
+            tiltPower = Range.clip(Opy2, -0.2, 0.2);
             //kickPower = Range.clip(y2Operator,-.1,1.0);
 
             // Left and right bumpers control shifting movements
