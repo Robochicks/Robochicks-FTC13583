@@ -54,7 +54,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
     private DcMotor br;
 
-    private DcMotor arm;
+    //private DcMotor arm;
 
     private DcMotor Spin;
 
@@ -100,13 +100,13 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         br = hardwareMap.get(DcMotor.class, "BR");
 
-        arm = hardwareMap.get(DcMotor.class, "Arm");
+        //arm = hardwareMap.get(DcMotor.class, "Arm");
 
         Spin = hardwareMap.get(DcMotor.class, "Spin");
 
 
 
-        imu = hardwareMap.get(BNO055IMU.class,"imu");
+       /* imu = hardwareMap.get(BNO055IMU.class,"imu");
 
         BNO055IMU.Parameters params = new BNO055IMU.Parameters();
 
@@ -137,7 +137,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
         telemetry.addData("Mode", "calibrated, waiting...");
 
         telemetry.update();
-
+*/
 
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -152,7 +152,7 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         br.setDirection(DcMotor.Direction.FORWARD);
 
-        arm.setDirection(DcMotor.Direction.FORWARD);
+        //arm.setDirection(DcMotor.Direction.FORWARD);
 
         Spin.setDirection(DcMotor.Direction.FORWARD);
 
@@ -174,79 +174,50 @@ public class RuckusAutoFacingCrater extends LinearOpMode {
 
         waitForStart();
 
-
-
         telemetry.addData("EncoderMovement", "Driving Forward");
-
         telemetry.update();
-
         //sleep(1000);
-
-
 
         // Movement A (drive forward from shuttle)
-
         SetDriveDistance(1460, 1460, 1460, 1460, 0.8, 0.8, 0.8, 0.8);
-
         //sleep(1000);
 
-
-
         /*Spit out marker
-
         spin.setPower(-0.2);
-
         sleep(2000);
-
         spin.setPower(0);**/
 
-
-
         // Movement A ~> B (turn)
-
         telemetry.addData("EncoderMovement", "Turning");
-
         telemetry.update();
 
+        SetDriveDistance(-1469, 1469, -1469, 1469, 0.6, 0.6, 0.6, 0.6);//Turn less
+        //sleep(1000);
 
+        telemetry.addData("EncoderMovement", "Complete");
+        telemetry.update();
 
-        //SetDriveDistance(-1469, 1469, -1469, 1469, 0.4, 0.4, 0.4, 0.4);
+        // Movement B (move forward)
+        SetDriveDistance(3384, 3384, 3384, 3384, 0.8, 0.8, 0.8, 0.8);//Measure new distance
+        //sleep(5000);
 
-        //sleep(1000
+        //telemetry.addData("EncoderMovement, ")
+        // Movement B ~> C (turn)
+        SetDriveDistance(-750, 750, -750, 750, 0.8,0.8, 0.8, 0.8);
 
-
-
-        SetTurn(0.4, 75);
-
-
-
-        SetDriveDistance(3384, 3384, 3384, 3384, 0.8, 0.8, 0.8, 0.8);
-
-
-
-        SetTurn(0.4, 70);
-
-
-
-        SetDriveDistance(3200, 3200, 3200, 3200, 0.8,0.8,0.8,0.8);
-
-
+        //Movement C (move forward towards depot)
+        SetDriveDistance(3200, 3200, 3200, 3200, 0.4,0.4,0.4,0.4);
 
         //Ejecting the marker
-
         Spin.setPower(-1);
-
         sleep(1000);
-
         Spin.setPower(0);
 
+        //Movement D (180 turn)
+        SetDriveDistance(-2869, 2869, -2869,2869,0.8,0.8,0.8,0.8);
 
-
-        SetTurn(0.4, 180);
-
-
-
-        SetDriveDistance(7091, 7091,7091,7091,0.8, 0.8, 0.8, 0.8);
+        //Movement E (move forward into crater)
+        SetDriveDistance(6091, 6091,6091,6091,0.8, 0.8, 0.8, 0.8);
 
     }
 

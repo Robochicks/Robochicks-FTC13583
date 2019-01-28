@@ -40,7 +40,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
     private DcMotor br;
 
-    private DcMotor arm;
+    //private DcMotor arm;
 
     private DcMotor Spin;
 
@@ -82,7 +82,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         br = hardwareMap.get(DcMotor.class, "BR");
 
-        arm = hardwareMap.get(DcMotor.class, "Arm");
+        //arm = hardwareMap.get(DcMotor.class, "Arm");
 
         Spin = hardwareMap.get(DcMotor.class, "Spin");
 
@@ -100,7 +100,7 @@ public class RuckusAutoEncoder extends LinearOpMode {
 
         br.setDirection(DcMotor.Direction.FORWARD);
 
-        arm.setDirection(DcMotor.Direction.FORWARD);
+        //arm.setDirection(DcMotor.Direction.FORWARD);
 
         Spin.setDirection(DcMotor.Direction.FORWARD);
 

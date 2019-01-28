@@ -17,7 +17,7 @@ public class RuckusAutoFacingCraterNoDepot extends LinearOpMode {
     private DcMotor fr;
     private DcMotor bl;
     private DcMotor br;
-    private DcMotor arm;
+    //private DcMotor arm;
     private DcMotor Spin;
     private Blinker expansion_Hub_2;
     private Blinker expansion_Hub_3;
@@ -37,7 +37,7 @@ public class RuckusAutoFacingCraterNoDepot extends LinearOpMode {
         fr = hardwareMap.get(DcMotor.class, "FR");
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
-        arm = hardwareMap.get(DcMotor.class, "Arm");
+        //arm = hardwareMap.get(DcMotor.class, "Arm");
         Spin = hardwareMap.get(DcMotor.class, "Spin");
 
         // Most robots need the motor on one side to be reversed to drive forward
@@ -46,7 +46,7 @@ public class RuckusAutoFacingCraterNoDepot extends LinearOpMode {
         fr.setDirection(DcMotor.Direction.FORWARD);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.FORWARD);
-        arm.setDirection(DcMotor.Direction.FORWARD);
+        //arm.setDirection(DcMotor.Direction.FORWARD);
         Spin.setDirection(DcMotor.Direction.FORWARD);
         fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
