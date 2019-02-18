@@ -5,26 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import com.qualcomm.robotcore.hardware.Blinker;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.qualcomm.robotcore.hardware.Gyroscope;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 
 //import com.qualcomm.robotcore.external.Telemetry;
@@ -53,7 +41,7 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
 
     private DcMotor Spin;
 
-    boolean IsMagnetSenced;
+    boolean IsMagnetSensed = false;
 
     private DigitalChannel limit;
 
@@ -62,7 +50,7 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
     // private Blinker expansion_Hub_3;
 
     //private ElapsedTime runtime = new ElapsedTime();
-    BNO055IMU imu;
+    //BNO055IMU imu;
     Orientation             lastAngles = new Orientation();
     double globalAngle, power = .30, correction;
 
@@ -138,7 +126,7 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
 
         telemetry.update();
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        /*BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
         parameters.mode                = BNO055IMU.SensorMode.IMU;
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -165,41 +153,24 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
         telemetry.addData("Mode", "waiting for start");
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
         telemetry.update();
-
+        */
 
         waitForStart();
 
 while (opModeIsActive()) {
-    telemetry.addData("Angle", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
-    telemetry.update();
+    //telemetry.addData("Angle", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
+    //telemetry.update();
 
     // lower robot
-    lift.setPower(0.1);
-    while (IsMagnetSenced == false) {
-
-        telemetry.addData("Mode", "Lowering robot");
-        telemetry.update();
-
-        IsMagnetSenced = limit.getState();
-
-
-        lift.setPower(0);
-
-        //strafe off the hook then turn around
-        SetDriveDistance(-300, 300, 300, -300, 0.1, 0.1, 0.1, 0.1);
-
-        SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
-    }
-
+   DetachFromLander();
 
     telemetry.addData("EncoderMovement", "Driving Forward");
 
     telemetry.update();
 
-
     // driving forward to the depot
 
-    SetDriveDistance(4200, 4200, 4200, 4200, 0.8, 0.8, 0.8, 0.8);
+    /*SetDriveDistance(4200, 4200, 4200, 4200, 0.8, 0.8, 0.8, 0.8);
 
 
     telemetry.addData("EncoderMovement", "Turning");
@@ -227,7 +198,7 @@ while (opModeIsActive()) {
 
     //sleep(5000);
 
-
+*/
     telemetry.addData("EncoderMovement", "Complete");
 
     telemetry.update();
@@ -339,18 +310,18 @@ while (opModeIsActive()) {
 
 
     }
-    private void resetAngle()
+    /*private void resetAngle()
     {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
     }
-
+*/
     /**
      * Get current cumulative angle rotation from last reset.
      * @return Angle in degrees. + = left, - = right.
      */
-    private double getAngle()
+    /*private double getAngle()
     {
         // We experimentally determined the Z axis is the axis we want to use for heading angle.
         // We have to process the angle because the imu works in euler angles so the Z axis is
@@ -372,12 +343,13 @@ while (opModeIsActive()) {
 
         return globalAngle;
     }
+    */
 
     /**
      * See if we are moving in a straight line and if not return a power correction value.
      * @return Power adjustment, + is adjust left - is adjust right.
      */
-    private double checkDirection()
+    /*private double checkDirection()
     {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
@@ -395,12 +367,12 @@ while (opModeIsActive()) {
 
         return correction;
     }
-
+*/
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
      */
-    private void rotate(int degrees, double power)
+    /*private void rotate(int degrees, double power)
     {
         double  leftPower, rightPower;
 
@@ -453,5 +425,26 @@ while (opModeIsActive()) {
 
         // reset angle tracking on new heading.
         resetAngle();
+    }
+
+    /*
+
+     */
+    private void DetachFromLander () {
+        lift.setPower(-0.6);
+        while (IsMagnetSensed == false) {
+
+            telemetry.addData("Mode", "Lowering robot");
+            telemetry.update();
+
+            IsMagnetSensed = limit.getState();
+        }
+
+        lift.setPower(0);
+        //strafe off the hook then turn around
+        //SetDriveDistance(-300, 300, 300, -300, 0.1, 0.1, 0.1, 0.1);
+
+        //SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
+
     }
 }

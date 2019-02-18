@@ -94,7 +94,7 @@ public class RuckusDriveComp extends LinearOpMode {
             double spinPower = 0;
 
             double y1 = -gamepad1.left_stick_y;
-            double x1 = gamepad1.left_stick_x;
+            //double x1 = gamepad1.left_stick_x;
             double x2 = gamepad1.right_stick_x;
             double Opy1 = gamepad2.left_stick_y;
             double Opy2 = gamepad2.right_stick_y;
@@ -102,12 +102,18 @@ public class RuckusDriveComp extends LinearOpMode {
 
 
             //double y2Operator = gamepad2.right_stick_y;
-            flPower = Range.clip(y1 + x1 + x2, -1.0, 1.0);
-            frPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
-            blPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
-            brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
+            flPower = Range.clip(y1 + x2, -1.0, 1.0);
+            frPower = Range.clip(y1 - x2, -1.0, 1.0);
+            blPower = Range.clip(y1 + x2, -1.0, 1.0);
+            brPower = Range.clip(y1 - x2, -1.0, 1.0);
             liftPower = Range.clip(Opy1, -1.0, 1.0);
             tiltPower = Range.clip(Opy2, -0.2, 0.2);
+
+            //double y2Operator = gamepad2.right_stick_y;
+           // flPower = Range.clip(y1 + x1 + x2, -1.0, 1.0);
+            //frPower = Range.clip(y1 - x1 - x2, -1.0, 1.0);
+            //blPower = Range.clip(y1 - x1 + x2, -1.0, 1.0);
+            //brPower = Range.clip(y1 + x1 - x2, -1.0, 1.0);
             //kickPower = Range.clip(y2Operator,-.1,1.0);
 
             // Left and right bumpers control shifting movements

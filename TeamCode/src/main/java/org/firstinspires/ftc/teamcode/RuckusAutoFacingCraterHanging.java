@@ -167,22 +167,7 @@ public class RuckusAutoFacingCraterHanging {
                 telemetry.update();
 
                 // lower robot
-                lift.setPower(0.1);
-                while (IsMagnetSenced == false) {
-
-                    telemetry.addData("Mode", "Lowering robot");
-                    telemetry.update();
-
-                    IsMagnetSenced = limit.getState();
-
-                }
-
-                lift.setPower(0);
-
-                //strafe off the hook then turn around
-                SetDriveDistance(-300, 300, 300, -300, 0.1, 0.1, 0.1, 0.1);
-
-                SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
+                DetachFromLander();
 
                 telemetry.addData("EncoderMovement", "Driving Forward");
                 telemetry.update();
@@ -457,8 +442,22 @@ public class RuckusAutoFacingCraterHanging {
 
 
         }
+        private void DetachFromLander () {
+            lift.setPower(0.1);
+            while (IsMagnetSenced == false) {
 
+                telemetry.addData("Mode", "Lowering robot");
+                telemetry.update();
+
+                IsMagnetSenced = limit.getState();
+            }
+
+            lift.setPower(0);
+            //strafe off the hook then turn around
+            SetDriveDistance(-300, 300, 300, -300, 0.1, 0.1, 0.1, 0.1);
+
+            SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
+
+        }
     }
-
-
 }
