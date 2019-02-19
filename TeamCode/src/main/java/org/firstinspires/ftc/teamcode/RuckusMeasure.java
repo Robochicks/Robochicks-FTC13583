@@ -64,7 +64,7 @@ public class RuckusMeasure extends LinearOpMode{
             telemetry.addData( "Distance", "BL (%d), BR (%d), FL (%d), FR (%d)", bl.getCurrentPosition(), br.getCurrentPosition(), fl.getCurrentPosition(), fr.getCurrentPosition());
             //telemetry.addData( "Arm",arm.getCurrentPosition());
             //telemetry.addData( "hook",piratehook.getServoPosition(0));
-            telemetry.addData("Sensed", limit.getState());
+            telemetry.addData("Sensed", !limit.getState());
             //telemetry.addData("Angle", imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES));
             telemetry.update();
 

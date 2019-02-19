@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Blinker;
@@ -29,6 +30,7 @@ public class RuckusDriveComp extends LinearOpMode {
     private DcMotor spin;
     private DcMotor tilt;
     private Blinker expansion_Hub_2;
+    private DigitalChannel limit;
     private Blinker expansion_Hub_3;
     private ElapsedTime runtime = new ElapsedTime();
     boolean ArmIsUp = true;
@@ -56,6 +58,7 @@ public class RuckusDriveComp extends LinearOpMode {
         slide = hardwareMap.get(DcMotor.class,"Slide");
         spin = hardwareMap.get (DcMotor.class, "Spin");
         tilt = hardwareMap.get (DcMotor.class, "Tilt");
+        limit = hardwareMap.get(DigitalChannel.class, "Limit");
 
 
         // hook = hardwareMap. get(Servo.class, "hook");
@@ -106,8 +109,12 @@ public class RuckusDriveComp extends LinearOpMode {
             frPower = Range.clip(y1 - x2, -1.0, 1.0);
             blPower = Range.clip(y1 + x2, -1.0, 1.0);
             brPower = Range.clip(y1 - x2, -1.0, 1.0);
-            liftPower = Range.clip(Opy1, -1.0, 1.0);
             tiltPower = Range.clip(Opy2, -0.2, 0.2);
+            liftPower = 0;
+
+            if (!limit.getState() == false || Opy1 <= 0 ) {
+                liftPower = Range.clip(Opy1, -1.0, 1.0);
+            }
 
             //double y2Operator = gamepad2.right_stick_y;
            // flPower = Range.clip(y1 + x1 + x2, -1.0, 1.0);

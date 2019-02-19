@@ -118,6 +118,8 @@ public class RuckusAutoEncoderHanging extends LinearOpMode {
 
         fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         limit.setMode(DigitalChannel.Mode.INPUT);
 
 
@@ -170,7 +172,7 @@ while (opModeIsActive()) {
 
     // driving forward to the depot
 
-    /*SetDriveDistance(4200, 4200, 4200, 4200, 0.8, 0.8, 0.8, 0.8);
+    /*SetDriveDistance(3000, 3000, 3000, 3000, 0.8, 0.8, 0.8, 0.8);
 
 
     telemetry.addData("EncoderMovement", "Turning");
@@ -202,7 +204,7 @@ while (opModeIsActive()) {
     telemetry.addData("EncoderMovement", "Complete");
 
     telemetry.update();
-
+    break;
 
 }
     }
@@ -368,10 +370,7 @@ while (opModeIsActive()) {
         return correction;
     }
 */
-    /**
-     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
-     * @param degrees Degrees to turn, + is left - is right
-     */
+
     /*private void rotate(int degrees, double power)
     {
         double  leftPower, rightPower;
@@ -431,20 +430,24 @@ while (opModeIsActive()) {
 
      */
     private void DetachFromLander () {
-        lift.setPower(-0.6);
+        lift.setPower(-0.7);
         while (IsMagnetSensed == false) {
+            IsMagnetSensed = !limit.getState();
 
             telemetry.addData("Mode", "Lowering robot");
+            telemetry.addData("Sensed:",!limit.getState());
             telemetry.update();
 
-            IsMagnetSensed = limit.getState();
+
         }
 
         lift.setPower(0);
         //strafe off the hook then turn around
-        //SetDriveDistance(-300, 300, 300, -300, 0.1, 0.1, 0.1, 0.1);
+        SetDriveDistance(-600, 600, 600, -600, 0.4, 0.4, 0.4, 0.4);
 
-        //SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
+        SetDriveDistance(-1200, -1200, -1200, -1200, 0.8, 0.8, 0.8, 0.8);
+
+        SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
 
     }
 }
