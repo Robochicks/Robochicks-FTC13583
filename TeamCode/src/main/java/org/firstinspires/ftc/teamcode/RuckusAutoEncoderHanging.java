@@ -443,7 +443,7 @@ while (opModeIsActive()) {
 
         lift.setPower(0);
         //strafe off the hook then turn around
-        SetDriveDistance(-600, 600, 600, -600, 0.4, 0.4, 0.4, 0.4);
+        SetDriveDistance(-1200, 1200, 1200, -1200, 0.4, 0.4, 0.4, 0.4);
 
         SetDriveDistance(-1200, -1200, -1200, -1200, 0.8, 0.8, 0.8, 0.8);
 

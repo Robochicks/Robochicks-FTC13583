@@ -173,7 +173,6 @@
                 // driving forward to the depot
 
                 // Movement A (drive forward from shuttle)
-                SetDriveDistance(260, 260, 260, 260, 0.8, 0.8, 0.8, 0.8);
                 //sleep(1000);
 
         /*Spit out marker
@@ -185,14 +184,11 @@
                 telemetry.addData("EncoderMovement", "Turning");
                 telemetry.update();
 
-                SetDriveDistance(-1469, 1469, -1469, 1469, 0.6, 0.6, 0.6, 0.6);//Turn less
-                //sleep(1000);
-
                 telemetry.addData("EncoderMovement", "Heading to depot");
                 telemetry.update();
 
                 // Movement B (move forward)
-                SetDriveDistance(3384, 3384, 3384, 3384, 0.8, 0.8, 0.8, 0.8);//Measure new distance
+                SetDriveDistance(3984, 3984, 3984, 3984, 0.8, 0.8, 0.8, 0.8);//Measure new distance
                 //sleep(5000);
 
                 //telemetry.addData("EncoderMovement, ")
@@ -203,7 +199,7 @@
                 SetDriveDistance(3200, 3200, 3200, 3200, 0.4,0.4,0.4,0.4);
 
                 //Ejecting the marker
-                Spin.setPower(-1);
+                Spin.setPower(1);
                 sleep(1500);
                 Spin.setPower(0);
 
@@ -463,9 +459,9 @@
             //strafe off the hook then turn around
             SetDriveDistance(-1200, 1200, 1200, -1200, 0.4, 0.4, 0.4, 0.4);
 
-            SetDriveDistance(-1200, -1200, -1200, -1200, 0.8, 0.8, 0.8, 0.8);
+            SetDriveDistance(-1460, -1460, -1460, -1460, 0.8, 0.8, 0.8, 0.8);
 
-            SetDriveDistance(-2869, 2869, -2869, 2869, 0.8, 0.8, 0.8, 0.8);
+            SetDriveDistance(1400, -1400, 1400, -1400, 0.8, 0.8, 0.8, 0.8);
 
         }
     }

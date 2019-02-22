@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 //import com.qualcomm.robotcore.external.Telemetry;
 
 @Autonomous(name="RuckusAutoDepotNoCrater")
+@Disabled
 
 public class RukusAutoDepotNoCrater extends LinearOpMode {
     private Gyroscope imu;
