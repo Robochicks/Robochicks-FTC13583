@@ -172,7 +172,7 @@ while (opModeIsActive()) {
 
     // driving forward to the depot
 
-    /*SetDriveDistance(3000, 3000, 3000, 3000, 0.8, 0.8, 0.8, 0.8);
+    SetDriveDistance(3000, 3000, 3000, 3000, 0.8, 0.8, 0.8, 0.8);
 
 
     telemetry.addData("EncoderMovement", "Turning");
@@ -182,9 +182,9 @@ while (opModeIsActive()) {
 
     //Ejecting the marker
 
-    Spin.setPower(-1);
+    Spin.setPower(1);
 
-    sleep(1000);
+    sleep(1500);
 
     Spin.setPower(0);
 
@@ -200,7 +200,7 @@ while (opModeIsActive()) {
 
     //sleep(5000);
 
-*/
+
     telemetry.addData("EncoderMovement", "Complete");
 
     telemetry.update();
