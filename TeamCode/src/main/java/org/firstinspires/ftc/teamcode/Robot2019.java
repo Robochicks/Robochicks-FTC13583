@@ -2,13 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.Range;
+
+import static java.lang.Thread.sleep;
 
 public class Robot2019 implements Robot {
     //add variables
@@ -18,10 +22,13 @@ public class Robot2019 implements Robot {
     private DcMotor bl;
     private DcMotor br;
     //private CRServoImplEx gs;
-    private ServoImplEx gs;
+    private Servo gs;
    // private DcMotor lm;
     private DcMotor rm;
     private DcMotor em;
+    private boolean gs_open;
+    private boolean gs_moving = false;
+    private ColorSensor color_sensor;
 
 
     public Robot2019(HardwareMap hardwareMap) {
@@ -31,10 +38,11 @@ public class Robot2019 implements Robot {
         fr = hardwareMap.get(DcMotor.class, "FR");
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
-        gs = hardwareMap.get(ServoImplEx.class, "GS");
+        gs = hardwareMap.get(Servo.class, "GS");
         //lm = hardwareMap.get(DcMotor.class,"LM");
         rm = hardwareMap.get(DcMotor.class, "RM");
         em = hardwareMap.get (DcMotor.class, "EM");
+        color_sensor = hardwareMap.colorSensor.get("color");
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.FORWARD);
@@ -81,6 +89,13 @@ public class Robot2019 implements Robot {
         double Operator1y = gamepad2.left_stick_y;
         double Opertor2x = gamepad2.right_stick_x;
 
+        color_sensor.red();
+        color_sensor.green();
+        color_sensor.blue();
+
+        color_sensor.alpha();
+        color_sensor.argb();
+
 
         flPower = Range.clip(y1 + x2, -1.0, 1.0);
         frPower = Range.clip(y1 - x2, -1.0, 1.0);
@@ -95,24 +110,41 @@ public class Robot2019 implements Robot {
         emPower = Opertor2x;
 
 
+        if ((gs.getPosition() == 1 || gs.getPosition() == 0) && gs_moving == true){
 
+            gs_moving = false;
+
+        }
 
 
 
         //MEASURE OPEN AND CLOSE STATE AND MAKE PRESETS FOR THE ARM.
-        if (OperatorBumper == true){
-            gsPosition = gs.getPosition() + .02;
+        //&& (gsPosition != 1.0 && gsPosition != 0.0)
+        if (OperatorBumper == true && gs_moving == false){
+
+            if (gs_open == true){
+
+                gsPosition = 0.0;
+                gs_open = false;
+                gs_moving = true;
+            }
+            else {
+
+                gsPosition = 1.0;
+                gs_open = true;
+                gs_moving =true;
+            }
+
+            gs.setPosition(gsPosition);
+            telemetry += gsPosition;
 
         }
-        else if (OperatorBumperLeft == true) {
-            gsPosition = gs.getPosition() - .02;
-        }
-        else{
-            gsPosition = gs.getPosition();
-        }
 
-        gs.setPosition(gsPosition);
-        telemetry += gsPosition;
+
+
+
+
+
 
         /*if (OPx2 > 0){
             lmPosition = lm.getCurrentPosition() + 2;
@@ -172,6 +204,30 @@ public class Robot2019 implements Robot {
         return telemetry;
     }
 
+    private void DriveUntilColor (){
+
+        double power = 1;
+
+        fl.setPower(power);
+        fr.setPower(power);
+        bl.setPower(power);
+        br.setPower(power);
+
+        while (color_sensor.blue() < 20 && color_sensor.red() < 20){
+            try {
+                sleep(100);
+            } catch (Exception e){
+                //do nothing
+            }
+
+        }
+
+        fl.setPower(0);
+        fr.setPower(0);
+        bl.setPower(0);
+        br.setPower(0);
+    }
+
     /**
      * SetDrivePower
      * Associates powers with corresponding motors
@@ -188,6 +244,55 @@ public class Robot2019 implements Robot {
         //lm.setPower(LiftMotorPower);
         rm.setPower(RaiseMotorPower);
         em.setPower(ExtendMotorPower);
+    }
+
+    public void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        bl.setTargetPosition(BackLeftDistance);
+        br.setTargetPosition(BackRightDistance);
+        fl.setTargetPosition(FrontLeftDistance);
+        fr.setTargetPosition(FrontRightDistance);
+
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        bl.setPower(BackLeftPower);
+        br.setPower(BackRightPower);
+        fl.setPower(FrontLeftPower);
+        fr.setPower(FrontRightPower);
+
+        while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
+           /* telemetry.addData("Mode" , "Moving");
+            telemetry.addData( "Distance BL", bl.getCurrentPosition());
+            telemetry.addData( "Distance BR", br.getCurrentPosition());
+            telemetry.addData( "Distance FL", fl.getCurrentPosition());
+            telemetry.addData( "Distance FR", fr.getCurrentPosition());
+
+            telemetry.addData( "Busy BL", bl.isBusy());
+            telemetry.addData( "Busy BR", br.isBusy());
+            telemetry.addData( "Busy FL", fl.isBusy());
+            telemetry.addData( "Busy FR", fr.isBusy());
+
+           telemetry.update();*/
+        }
+
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+       // telemetry.addData("EncoderMovement", "Complete");
+        //telemetry.update();
+
+        //return"";
+
+
     }
 }
 
