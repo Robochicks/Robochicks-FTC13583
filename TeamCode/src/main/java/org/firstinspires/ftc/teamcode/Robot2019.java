@@ -29,6 +29,7 @@ public class Robot2019 implements Robot {
 
     private boolean gs_open;
     private boolean gs_moving = false;
+    private double gsTarget = 0;
     private ColorSensor color_sensor;
 
     //JA changes start
@@ -115,14 +116,14 @@ public class Robot2019 implements Robot {
         color_sensor.alpha();
         color_sensor.argb();
 
-
+        //TODO: add gamepad1.left_stick_x to powers
         flPower = Range.clip(y1 + x2, -1.0, 1.0);
         frPower = Range.clip(y1 - x2, -1.0, 1.0);
         blPower = Range.clip(y1 + x2, -1.0, 1.0);
         brPower = Range.clip(y1 - x2, -1.0, 1.0);
 
         //JA changes start
-        lmPower = Operator1y / 4;
+        lmPower = Operator1y / 3;
         //lmPower = Opertor2x;
         ////rmPower = Operator1y;
         //JA changes end
@@ -133,37 +134,38 @@ public class Robot2019 implements Robot {
         //rmPower = Operator1y;
         emPower = Opertor2x;
 
-
-        if ((gs.getPosition() == 1 || gs.getPosition() == 0) && gs_moving == true){
+        //JA changes start
+        /*if ((gs.getPosition() == 1 || gs.getPosition() == 0) && gs_moving == true){
 
             gs_moving = false;
 
-        }
-
-
+        }*/
 
         //MEASURE OPEN AND CLOSE STATE AND MAKE PRESETS FOR THE ARM.
         //&& (gsPosition != 1.0 && gsPosition != 0.0)
-        if (OperatorBumper == true && gs_moving == false){
-
+        /*if (OperatorBumper == true && gs_moving == false){
             if (gs_open == true){
-
-                gsPosition = 0.0;
-                gs_open = false;
-                gs_moving = true;
-            }
-            else {
-
+                    gsPosition = 0.0;
+                    gs_open = false;
+                    gs_moving = true;
+                }else{
                 gsPosition = 1.0;
                 gs_open = true;
                 gs_moving =true;
             }
-
             gs.setPosition(gsPosition);
-            telemetry += gsPosition;
+            telemetry += "New target: " + gsTarget;
 
+        }*/
+        if (OperatorBumper == true ){
+            gsTarget = 0.0;
+            gs.setPosition(gsTarget);
         }
-
+        else if (OperatorBumperLeft == true) {
+            gsTarget = 1.0;
+            gs.setPosition(gsTarget);
+        }
+        //JA changes end
 
 
 
@@ -190,7 +192,7 @@ public class Robot2019 implements Robot {
          */
 
 
-
+        //TODO: address powers, potentially remove shift function from bnumpers or readdress priority for values
         if (gamepad1.left_bumper == true) {
             // telemetry.addData("Left Bumper", "Pressed");
             frPower = (0.7);
