@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.CRServoImpl;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -23,12 +24,18 @@ public class Robot2019 implements Robot {
     private DcMotor br;
     //private CRServoImplEx gs;
     private Servo gs;
-   // private DcMotor lm;
-    private DcMotor rm;
-    private DcMotor em;
+    private DcMotor lm;
+
+
     private boolean gs_open;
     private boolean gs_moving = false;
     private ColorSensor color_sensor;
+
+    //JA changes start
+    private CRServoImpl exServo;
+    //private DcMotor rm;
+   // private DcMotor em;
+    //JA changes end
 
 
     public Robot2019(HardwareMap hardwareMap) {
@@ -39,23 +46,30 @@ public class Robot2019 implements Robot {
         bl = hardwareMap.get(DcMotor.class, "BL");
         br = hardwareMap.get(DcMotor.class, "BR");
         gs = hardwareMap.get(Servo.class, "GS");
-        //lm = hardwareMap.get(DcMotor.class,"LM");
-        rm = hardwareMap.get(DcMotor.class, "RM");
-        em = hardwareMap.get (DcMotor.class, "EM");
+        lm = hardwareMap.get(DcMotor.class,"LM");
+
         color_sensor = hardwareMap.colorSensor.get("color");
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         fr.setDirection(DcMotor.Direction.FORWARD);
         bl.setDirection(DcMotor.Direction.REVERSE);
         br.setDirection(DcMotor.Direction.FORWARD);
-        //lm.setDirection(DcMotor.Direction.FORWARD);
-        rm.setDirection(DcMotor.Direction.FORWARD);
-        em.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        //JA changes start
+        //rm = hardwareMap.get(DcMotor.class, "RM");
+        lm.setDirection(DcMotor.Direction.FORWARD);
+        //rm.setDirection(DcMotor.Direction.FORWARD);
+        //JA changes end
+
+        exServo = hardwareMap.get(CRServoImpl.class, "exServo");
+
+        /*em = hardwareMap.get (DcMotor.class, "EM");
+        em.setDirection(DcMotorSimple.Direction.FORWARD);*/
         //sr.setDirection(CRServoImplEx.);
 
 
 
-        //lm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
@@ -74,12 +88,17 @@ public class Robot2019 implements Robot {
         double frPower;
         double blPower;
         double brPower;
-        //double lmPower;
-        double rmPower;
-        double emPower;
+        double lmPower;
+
         //double gsPower;
         double gsPosition;
+
+        //JA changes start
+        //double rmPower;
         int lmPosition;
+        //JA changes end
+
+        double emPower;
 
         double y1 = -gamepad1.left_stick_y;
         double x2 = gamepad1.right_stick_x;
@@ -101,12 +120,17 @@ public class Robot2019 implements Robot {
         frPower = Range.clip(y1 - x2, -1.0, 1.0);
         blPower = Range.clip(y1 + x2, -1.0, 1.0);
         brPower = Range.clip(y1 - x2, -1.0, 1.0);
-        //lmPower = OPx2;
+
+        //JA changes start
+        lmPower = Operator1y / 4;
+        //lmPower = Opertor2x;
+        ////rmPower = Operator1y;
+        //JA changes end
 
         //288
 
 
-        rmPower = Operator1y;
+        //rmPower = Operator1y;
         emPower = Opertor2x;
 
 
@@ -192,7 +216,11 @@ public class Robot2019 implements Robot {
         //            + " m: " + lmPosition;
         */
 
-        SetDrivePower(flPower,frPower,blPower,brPower,rmPower, emPower);
+       //JA change start
+       // SetDrivePower(flPower,frPower,blPower,brPower,rmPower, emPower);
+        SetDrivePower(flPower,frPower,blPower,brPower, emPower, lmPower);
+        //JA change end
+
         /*if (gamepad1.a == true) {
             gs.setPower(1.0);
         }
@@ -236,14 +264,23 @@ public class Robot2019 implements Robot {
      * @param BackLeftPower Sets back left power
      * @param BackRightPower Sets back right power
      */
-    private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, Double RaiseMotorPower, double ExtendMotorPower) {
+    //JA changes start
+    private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double ExtendMotorPower, double LiftMotorPower) {
+      //  private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, Double RaiseMotorPower, double ExtendMotorPower) {
+        //JA chagnes end
         fl.setPower(FrontLeftPower);
         fr.setPower(FrontRightPower);
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
         //lm.setPower(LiftMotorPower);
-        rm.setPower(RaiseMotorPower);
-        em.setPower(ExtendMotorPower);
+
+        //JA changes start
+        //em.setPower(ExtendMotorPower);
+        //rm.setPower(RaiseMotorPower);
+
+        exServo.setPower(ExtendMotorPower);
+        lm.setPower(LiftMotorPower);
+        //JA changes end
     }
 
     public void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
