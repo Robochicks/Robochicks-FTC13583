@@ -13,6 +13,8 @@ import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import static java.lang.Thread.sleep;
 
 public class Robot2019 implements Robot {
@@ -25,12 +27,12 @@ public class Robot2019 implements Robot {
     //private CRServoImplEx gs;
     private Servo gs;
     private DcMotor lm;
-
+    String grip_status = "closed";
 
     private boolean gs_open;
     private boolean gs_moving = false;
     private double gsTarget = 0;
-    private ColorSensor color_sensor;
+    public ColorSensor color_sensor;
 
     //JA changes start
     private CRServoImpl exServo;
@@ -58,7 +60,7 @@ public class Robot2019 implements Robot {
 
         //JA changes start
         //rm = hardwareMap.get(DcMotor.class, "RM");
-        lm.setDirection(DcMotor.Direction.FORWARD);
+        lm.setDirection(DcMotor.Direction.REVERSE);
         //rm.setDirection(DcMotor.Direction.FORWARD);
         //JA changes end
 
@@ -82,9 +84,8 @@ public class Robot2019 implements Robot {
      * @param gamepad1 To control the robot in drive mode (Driver)
      * @param gamepad2 To control the robot in drive mode (Operator)
      */
-    public String DriveFunction(Gamepad gamepad1, Gamepad gamepad2) {
+    public void DriveFunction(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
 
-        String telemetry = "";
         double flPower;
         double frPower;
         double blPower;
@@ -101,13 +102,14 @@ public class Robot2019 implements Robot {
 
         double emPower;
 
-        double y1 = -gamepad1.left_stick_y;
-        double x2 = gamepad1.right_stick_x;
-        double OPx2 = gamepad2.right_stick_x;
+        double drive = -gamepad1.left_stick_y;
+        double shift = gamepad1.left_stick_x;
+        double rotate = gamepad1.right_stick_x;
+        //double OPx2 = gamepad2.right_stick_x;
         boolean OperatorBumper = gamepad2.right_bumper;
         boolean OperatorBumperLeft = gamepad2.left_bumper;
-        double Operator1y = gamepad2.left_stick_y;
-        double Opertor2x = gamepad2.right_stick_x;
+        double lift = -gamepad2.left_stick_y;
+        double extend = gamepad2.right_stick_x;
 
         color_sensor.red();
         color_sensor.green();
@@ -117,22 +119,22 @@ public class Robot2019 implements Robot {
         color_sensor.argb();
 
         //TODO: add gamepad1.left_stick_x to powers
-        flPower = Range.clip(y1 + x2, -1.0, 1.0);
-        frPower = Range.clip(y1 - x2, -1.0, 1.0);
-        blPower = Range.clip(y1 + x2, -1.0, 1.0);
-        brPower = Range.clip(y1 - x2, -1.0, 1.0);
+        flPower = Range.clip(drive + rotate - shift, -1.0, 1.0);
+        frPower = Range.clip(drive - rotate + shift, -1.0, 1.0);
+        blPower = Range.clip(drive + rotate + shift, -1.0, 1.0);
+        brPower = Range.clip(drive - rotate - shift, -1.0, 1.0);
 
         //JA changes start
-        lmPower = Operator1y / 3;
-        //lmPower = Opertor2x;
-        ////rmPower = Operator1y;
+        lmPower = lift / 3;
+        //lmPower = extend;
+        ////rmPower = lift;
         //JA changes end
 
         //288
 
 
-        //rmPower = Operator1y;
-        emPower = Opertor2x;
+        //rmPower = lift;
+        emPower = extend;
 
         //JA changes start
         /*if ((gs.getPosition() == 1 || gs.getPosition() == 0) && gs_moving == true){
@@ -160,14 +162,14 @@ public class Robot2019 implements Robot {
         if (OperatorBumper == true ){
             gsTarget = 0.0;
             gs.setPosition(gsTarget);
+            grip_status = "closed";
         }
         else if (OperatorBumperLeft == true) {
             gsTarget = 1.0;
             gs.setPosition(gsTarget);
+            grip_status = "open";
         }
         //JA changes end
-
-
 
 
 
@@ -192,7 +194,7 @@ public class Robot2019 implements Robot {
          */
 
 
-        //TODO: address powers, potentially remove shift function from bnumpers or readdress priority for values
+        //TODO: address powers, potentially remove shift function from bumpers or readdress priority for values
         if (gamepad1.left_bumper == true) {
             // telemetry.addData("Left Bumper", "Pressed");
             frPower = (0.7);
@@ -230,11 +232,19 @@ public class Robot2019 implements Robot {
             gs.setPower(0.0);
         }*/
 
+        //telemetry = "";
+        telemetry.addData("Grip",grip_status);
+        telemetry.addData("FrontLeftMotor",flPower);
+        telemetry.addData("FrontRightMotor",frPower);
+        telemetry.addData("BackLeftMotor",blPower);
+        telemetry.addData("BackRightMotor",brPower);
+        telemetry.addData("ExtensionMotor",emPower);
+        telemetry.addData("LiftMotor",lmPower);
 
-        return telemetry;
+        //return "";
     }
 
-    private void DriveUntilColor (){
+    public void DriveUntilColor (Telemetry telemetry){
 
         double power = 1;
 
@@ -243,14 +253,21 @@ public class Robot2019 implements Robot {
         bl.setPower(power);
         br.setPower(power);
 
-        while (color_sensor.blue() < 20 && color_sensor.red() < 20){
+        while (color_sensor.blue() < 10 && color_sensor.red() < 10){
             try {
                 sleep(100);
             } catch (Exception e){
                 //do nothing
             }
-
+            telemetry.addData("Blue",color_sensor.blue());
+            telemetry.addData("Red",color_sensor.red());
+            telemetry.addData("Green",color_sensor.green());
+            telemetry.addData("status", "searching...");
+            telemetry.update();
         }
+        telemetry.addData("status","found!");
+        telemetry.update();
+
 
         fl.setPower(0);
         fr.setPower(0);

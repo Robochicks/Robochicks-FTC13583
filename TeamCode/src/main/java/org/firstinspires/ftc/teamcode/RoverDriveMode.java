@@ -22,11 +22,12 @@ public class RoverDriveMode extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            String Log;
+            //String Log;
 
-            Log = rover.DriveFunction(gamepad1, gamepad2);
+            //Log =
+             rover.DriveFunction(gamepad1, gamepad2, telemetry);
 
-            telemetry.addData("position", Log);
+            //telemetry.addData("Status:", Log);
             telemetry.update();
 
         }

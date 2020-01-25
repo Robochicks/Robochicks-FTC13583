@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 
 @TeleOp(name="RuckusDriveComp")
+@Disabled
 public class RuckusDriveComp extends LinearOpMode {
     private Gyroscope imu;
     private DcMotor fl;
