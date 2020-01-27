@@ -119,13 +119,13 @@ public class Robot2019 implements Robot {
         color_sensor.argb();
 
         //TODO: add gamepad1.left_stick_x to powers
-        flPower = Range.clip(drive + rotate - shift, -1.0, 1.0);
-        frPower = Range.clip(drive - rotate + shift, -1.0, 1.0);
-        blPower = Range.clip(drive + rotate + shift, -1.0, 1.0);
-        brPower = Range.clip(drive - rotate - shift, -1.0, 1.0);
+        flPower = Range.clip(drive + rotate + shift, -1.0, 1.0);
+        frPower = Range.clip(drive - rotate - shift, -1.0, 1.0);
+        blPower = Range.clip(drive + rotate - shift, -1.0, 1.0);
+        brPower = Range.clip(drive - rotate + shift, -1.0, 1.0);
 
         //JA changes start
-        lmPower = lift / 3;
+        lmPower = lift * .75;
         //lmPower = extend;
         ////rmPower = lift;
         //JA changes end
@@ -244,35 +244,14 @@ public class Robot2019 implements Robot {
         //return "";
     }
 
-    public void DriveUntilColor (Telemetry telemetry){
+    public void DriveUntilColor (double power){
 
-        double power = 1;
+        //double power = 1;
 
         fl.setPower(power);
         fr.setPower(power);
         bl.setPower(power);
         br.setPower(power);
-
-        while (color_sensor.blue() < 10 && color_sensor.red() < 10){
-            try {
-                sleep(100);
-            } catch (Exception e){
-                //do nothing
-            }
-            telemetry.addData("Blue",color_sensor.blue());
-            telemetry.addData("Red",color_sensor.red());
-            telemetry.addData("Green",color_sensor.green());
-            telemetry.addData("status", "searching...");
-            telemetry.update();
-        }
-        telemetry.addData("status","found!");
-        telemetry.update();
-
-
-        fl.setPower(0);
-        fr.setPower(0);
-        bl.setPower(0);
-        br.setPower(0);
     }
 
     /**
