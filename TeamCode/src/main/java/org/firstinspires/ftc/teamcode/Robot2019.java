@@ -5,9 +5,12 @@ import com.qualcomm.robotcore.hardware.CRServoImpl;
 import com.qualcomm.robotcore.hardware.CRServoImplEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImpl;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
@@ -20,10 +23,10 @@ import static java.lang.Thread.sleep;
 public class Robot2019 implements Robot {
     //add variables
 
-    private DcMotor fl;
-    private DcMotor fr;
-    private DcMotor bl;
-    private DcMotor br;
+    private DcMotorEx fl;
+    private DcMotorEx fr;
+    private DcMotorEx bl;
+    private DcMotorEx br;
     //private CRServoImplEx gs;
     private Servo gs;
     private DcMotor lm;
@@ -44,12 +47,14 @@ public class Robot2019 implements Robot {
     public Robot2019(HardwareMap hardwareMap) {
         //assign variables
 
-        fl = hardwareMap.get(DcMotor.class, "FL");
-        fr = hardwareMap.get(DcMotor.class, "FR");
-        bl = hardwareMap.get(DcMotor.class, "BL");
-        br = hardwareMap.get(DcMotor.class, "BR");
+        //Getting the extended DCMotor class.
+        //This is needed to correct the PID of the motors for using the encoder.
+        fl = (DcMotorEx) hardwareMap.get(DcMotor.class, "FL");
+        fr = (DcMotorEx) hardwareMap.get(DcMotor.class, "FR");
+        bl = (DcMotorEx) hardwareMap.get(DcMotor.class, "BL");
+        br = (DcMotorEx) hardwareMap.get(DcMotor.class, "BR");
         gs = hardwareMap.get(Servo.class, "GS");
-        lm = hardwareMap.get(DcMotor.class,"LM");
+        lm = hardwareMap.get(DcMotor.class, "LM");
 
         color_sensor = hardwareMap.colorSensor.get("color");
 
@@ -71,18 +76,17 @@ public class Robot2019 implements Robot {
         //sr.setDirection(CRServoImplEx.);
 
 
-
         lm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
 
-    //drive function
-
     /**
-     * DriveFunction
-     * Driving during the teleop
-     * @param gamepad1 To control the robot in drive mode (Driver)
-     * @param gamepad2 To control the robot in drive mode (Operator)
+     * Drive function. Use with gamepads for teleop.
+     * Goal will be to interpret the inputs, and operate the robot.
+     * @opmode
+     * @param gamepad1
+     * @param gamepad2
+     * @param telemetry
      */
     public void DriveFunction(Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
 
@@ -124,41 +128,10 @@ public class Robot2019 implements Robot {
         blPower = Range.clip(drive + rotate - shift, -1.0, 1.0);
         brPower = Range.clip(drive - rotate + shift, -1.0, 1.0);
 
-        //JA changes start
         lmPower = lift * .75;
-        //lmPower = extend;
-        ////rmPower = lift;
-        //JA changes end
 
-        //288
-
-
-        //rmPower = lift;
         emPower = extend;
 
-        //JA changes start
-        /*if ((gs.getPosition() == 1 || gs.getPosition() == 0) && gs_moving == true){
-
-            gs_moving = false;
-
-        }*/
-
-        //MEASURE OPEN AND CLOSE STATE AND MAKE PRESETS FOR THE ARM.
-        //&& (gsPosition != 1.0 && gsPosition != 0.0)
-        /*if (OperatorBumper == true && gs_moving == false){
-            if (gs_open == true){
-                    gsPosition = 0.0;
-                    gs_open = false;
-                    gs_moving = true;
-                }else{
-                gsPosition = 1.0;
-                gs_open = true;
-                gs_moving =true;
-            }
-            gs.setPosition(gsPosition);
-            telemetry += "New target: " + gsTarget;
-
-        }*/
         if (OperatorBumper == true ){
             gsTarget = 0.0;
             gs.setPosition(gsTarget);
@@ -169,32 +142,7 @@ public class Robot2019 implements Robot {
             gs.setPosition(gsTarget);
             grip_status = "open";
         }
-        //JA changes end
 
-
-
-
-        /*if (OPx2 > 0){
-            lmPosition = lm.getCurrentPosition() + 2;
-            lm.setTargetPosition(lmPosition);
-            lm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else if (OPx2 < 0) {
-            lmPosition = lm.getCurrentPosition() - 2;
-            lm.setTargetPosition(lmPosition);
-            lm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
-        else{
-            lmPosition = lm.getCurrentPosition();
-        }
-
-
-        //lm.setPower(1);
-
-         */
-
-
-        //TODO: address powers, potentially remove shift function from bumpers or readdress priority for values
         if (gamepad1.left_bumper == true) {
             // telemetry.addData("Left Bumper", "Pressed");
             frPower = (0.7);
@@ -211,28 +159,8 @@ public class Robot2019 implements Robot {
             frPower = (-0.7);
         }
 
-       /* if (gamepad2.a == true){
-
-        }
-
-        // gs.setPosition(gsPosition);
-        //telemetry = telemetry + "sv:" + gsPosition
-        //            + " m: " + lmPosition;
-        */
-
-       //JA change start
-       // SetDrivePower(flPower,frPower,blPower,brPower,rmPower, emPower);
         SetDrivePower(flPower,frPower,blPower,brPower, emPower, lmPower);
-        //JA change end
 
-        /*if (gamepad1.a == true) {
-            gs.setPower(1.0);
-        }
-        else{
-            gs.setPower(0.0);
-        }*/
-
-        //telemetry = "";
         telemetry.addData("Grip",grip_status);
         telemetry.addData("FrontLeftMotor",flPower);
         telemetry.addData("FrontRightMotor",frPower);
@@ -240,13 +168,9 @@ public class Robot2019 implements Robot {
         telemetry.addData("BackRightMotor",brPower);
         telemetry.addData("ExtensionMotor",emPower);
         telemetry.addData("LiftMotor",lmPower);
-
-        //return "";
     }
 
     public void DriveUntilColor (double power){
-
-        //double power = 1;
 
         fl.setPower(power);
         fr.setPower(power);
@@ -257,31 +181,162 @@ public class Robot2019 implements Robot {
     /**
      * SetDrivePower
      * Associates powers with corresponding motors
+     * To be used with encoder
+     * @autonomous
      * @param FrontLeftPower Sets front left power
      * @param FrontRightPower Sets front right power
      * @param BackLeftPower Sets back left power
      * @param BackRightPower Sets back right power
+     * @param LiftMotorPower Sets lift motor power
      */
-    //JA changes start
-    private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double ExtendMotorPower, double LiftMotorPower) {
-      //  private void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, Double RaiseMotorPower, double ExtendMotorPower) {
-        //JA chagnes end
+    public void SetDrivePower(double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double ExtendMotorPower, double LiftMotorPower) {
         fl.setPower(FrontLeftPower);
         fr.setPower(FrontRightPower);
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
-        //lm.setPower(LiftMotorPower);
 
-        //JA changes start
-        //em.setPower(ExtendMotorPower);
-        //rm.setPower(RaiseMotorPower);
 
         exServo.setPower(ExtendMotorPower);
         lm.setPower(LiftMotorPower);
-        //JA changes end
     }
 
-    public void SetDriveDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower){
+    /**
+     * Function to clear the motor encoders.
+     * Do nothing if not using encoders.
+     * @autonomous
+     */
+    public void ClearEncoders(){
+        bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    /**
+     * Sets the robot up for autonomous mode.
+     * this sets the
+     * also sets the PID of motors
+     * IMPORTANT: this should NOT be touched, it currently works and stops the
+     *              robot from jittering when driving with encoders.
+     * @autonomous
+     */
+    public void PrepRobotAuto(){
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        double P = 10, I = 3, D = 0.00, F = 1.17;
+        fl.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(new PIDCoefficients(P,I,D)));
+        bl.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(new PIDCoefficients(P,I,D)));
+        br.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(new PIDCoefficients(P,I,D)));
+        fr.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, new PIDFCoefficients(new PIDCoefficients(P,I,D)));
+    }
+
+    /**
+     * This handles the motor logging.
+     * @param telemetry
+     */
+    public void logMotors(Telemetry telemetry){
+        telemetry.addData("Mode" , "Moving");
+        telemetry.addData( "Distance BL", bl.getCurrentPosition() + "/" + bl.getTargetPosition());
+        telemetry.addData( "Distance BR", br.getCurrentPosition() + "/" + br.getTargetPosition());
+        telemetry.addData( "Distance FL", fl.getCurrentPosition() + "/" + fl.getTargetPosition());
+        telemetry.addData( "Distance FR", fr.getCurrentPosition() + "/" + fr.getTargetPosition());
+
+        telemetry.addData( "Busy BL", bl.isBusy());
+        telemetry.addData( "Busy BR", br.isBusy());
+        telemetry.addData( "Busy FL", fl.isBusy());
+        telemetry.addData( "Busy FR", fr.isBusy());
+    }
+
+    /**
+     * Function to drive the robot a set amount of distance.
+     * Uses encoder (likely) to determine movement.
+     * Use each motor equipped with an encoder.
+     * @autonomous
+     * @param FrontLeftDistance
+     * @param FrontRightDistance
+     * @param BackLeftDistance
+     * @param BackRightDistance
+     */
+    public void SetEncoderDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance){
+        bl.setTargetPosition(BackLeftDistance);
+        br.setTargetPosition(BackRightDistance);
+        fl.setTargetPosition(FrontLeftDistance);
+        fr.setTargetPosition(FrontRightDistance);
+
+        bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void SetEncoderDistance(){
+
+    }
+
+    /**
+     * This tells the user if the drive motors are still busy.
+     * Expand to manipulators if needed.
+     * @autonomous
+     * @return true if the motors are busy.
+     */
+    public boolean isBusy(){
+        return fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy();
+    }
+
+
+    /**
+     * Function to drive the robot a set amount of time.
+     * @autonomous
+     * @param telemetry
+     * @param time
+     * @param FrontLeftPower
+     * @param FrontRightPower
+     * @param BackLeftPower
+     * @param BackRightPower
+     * @param LiftPower
+     */
+    public void SetDriveTime (Telemetry telemetry, int time, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double LiftPower){
+
+        bl.setPower(BackLeftPower);
+        br.setPower(BackRightPower);
+        fl.setPower(FrontLeftPower);
+        fr.setPower(FrontRightPower);
+        lm.setPower(LiftPower);
+        telemetry.addData("Time movement", "Starting");
+        telemetry.update();
+
+        try {
+            telemetry.addData("Time movement", "Waiting");
+            telemetry.update();
+            sleep(time*1000);
+        } catch (Exception e){
+            //do nothing
+        }
+        telemetry.addData("Time movement", "Ending");
+        telemetry.update();
+
+        bl.setPower(0);
+        br.setPower(0);
+        fl.setPower(0);
+        fr.setPower(0);
+        lm.setPower(0);
+    }
+
+    /**
+     * @deprecated
+     * drive with a set position.
+     * No longer needed. Abandoned to allow autonomous to stop robot.
+     * @param telemetry
+     * @double power,
+     * @param FrontLeftDistance
+     * @param FrontRightDistance
+     * @param BackLeftDistance
+     * @param BackRightDistance
+     */
+    public void SetDriveDistance(Telemetry telemetry, double drive_power, int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance){
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         br.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -297,13 +352,13 @@ public class Robot2019 implements Robot {
         fl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         fr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        bl.setPower(BackLeftPower);
-        br.setPower(BackRightPower);
-        fl.setPower(FrontLeftPower);
-        fr.setPower(FrontRightPower);
+        bl.setPower(drive_power);
+        br.setPower(drive_power);
+        fl.setPower(drive_power);
+        fr.setPower(drive_power);
 
         while(fl.isBusy() || bl.isBusy() || fr.isBusy() || br.isBusy()) {
-           /* telemetry.addData("Mode" , "Moving");
+            telemetry.addData("Mode" , "Moving");
             telemetry.addData( "Distance BL", bl.getCurrentPosition());
             telemetry.addData( "Distance BR", br.getCurrentPosition());
             telemetry.addData( "Distance FL", fl.getCurrentPosition());
@@ -314,7 +369,7 @@ public class Robot2019 implements Robot {
             telemetry.addData( "Busy FL", fl.isBusy());
             telemetry.addData( "Busy FR", fr.isBusy());
 
-           telemetry.update();*/
+           telemetry.update();
         }
 
         bl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -322,11 +377,8 @@ public class Robot2019 implements Robot {
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         fr.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-       // telemetry.addData("EncoderMovement", "Complete");
-        //telemetry.update();
-
-        //return"";
-
+        telemetry.addData("EncoderMovement", "Complete");
+        telemetry.update();
 
     }
 }
