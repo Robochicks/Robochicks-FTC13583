@@ -112,7 +112,7 @@ public class Robot2019 implements Robot {
         //double OPx2 = gamepad2.right_stick_x;
         boolean OperatorBumper = gamepad2.right_bumper;
         boolean OperatorBumperLeft = gamepad2.left_bumper;
-        double lift = -gamepad2.left_stick_y;
+        double lift = gamepad2.left_stick_y;
         double extend = gamepad2.right_stick_x;
 
         color_sensor.red();
@@ -182,7 +182,7 @@ public class Robot2019 implements Robot {
      * SetDrivePower
      * Associates powers with corresponding motors
      * To be used with encoder
-     * @autonomous
+     * @opmode
      * @param FrontLeftPower Sets front left power
      * @param FrontRightPower Sets front right power
      * @param BackLeftPower Sets back left power
@@ -255,16 +255,14 @@ public class Robot2019 implements Robot {
      * Uses encoder (likely) to determine movement.
      * Use each motor equipped with an encoder.
      * @autonomous
-     * @param FrontLeftDistance
-     * @param FrontRightDistance
-     * @param BackLeftDistance
-     * @param BackRightDistance
+     * @param direction
+     * @param distance
      */
-    public void SetEncoderDistance(int FrontLeftDistance, int FrontRightDistance, int BackLeftDistance, int BackRightDistance){
-        bl.setTargetPosition(BackLeftDistance);
-        br.setTargetPosition(BackRightDistance);
-        fl.setTargetPosition(FrontLeftDistance);
-        fr.setTargetPosition(FrontRightDistance);
+    public void SetEncoderDistance(direction direction, int distance){
+        bl.setTargetPosition(direction.bl_dir * distance);
+        br.setTargetPosition(direction.br_dir * distance);
+        fl.setTargetPosition(direction.fl_dir * distance);
+        fr.setTargetPosition(direction.fr_dir * distance);
 
         bl.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         br.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -298,13 +296,38 @@ public class Robot2019 implements Robot {
      * @param BackRightPower
      * @param LiftPower
      */
-    public void SetDriveTime (Telemetry telemetry, int time, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double LiftPower){
+    public void SetDriveTime (Telemetry telemetry, double time, double FrontLeftPower, double FrontRightPower, double BackLeftPower, double BackRightPower, double LiftPower){
 
         bl.setPower(BackLeftPower);
         br.setPower(BackRightPower);
         fl.setPower(FrontLeftPower);
         fr.setPower(FrontRightPower);
         lm.setPower(LiftPower);
+        telemetry.addData("Time movement", "Starting");
+        telemetry.update();
+
+        try {
+            telemetry.addData("Time movement", "Waiting");
+            telemetry.update();
+            sleep(Math.round(time*1000));
+        } catch (Exception e){
+            //do nothing
+        }
+        telemetry.addData("Time movement", "Ending");
+        telemetry.update();
+
+        bl.setPower(0);
+        br.setPower(0);
+        fl.setPower(0);
+        fr.setPower(0);
+        lm.setPower(0);
+    }
+
+    public void SetDriveTime(Telemetry telemetry, direction direction, double power, int time){
+        bl.setPower(power * direction.bl_dir);
+        br.setPower(power * direction.br_dir);
+        fl.setPower(power * direction.fl_dir);
+        fr.setPower(power * direction.fr_dir);
         telemetry.addData("Time movement", "Starting");
         telemetry.update();
 

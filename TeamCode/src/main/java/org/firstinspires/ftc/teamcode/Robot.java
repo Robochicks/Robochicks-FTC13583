@@ -20,29 +20,31 @@ public interface Robot {
      * Uses encoder (likely) to determine movement.
      * Use each motor equipped with an encoder.
      * @autonomous
-     * @param distances
-     * TODO: Fix declaration
+     * @param direction
+     * @param distance
      */
-    //public void SetEncoderDistance(int...distances);
+    public void SetEncoderDistance(direction direction, int distance);
 
     /**
      * Function to drive the robot a set amount of time.
      * @autonomous
      * @param telemetry
      * @param time
-     * @param powers
+     * @param direction
+     * @param power
      * TODO: Fix declaration
      */
-    //public void SetDriveTime(Telemetry telemetry, int time, double...powers);
+   // public void SetDriveTime(Telemetry telemetry, int time, direction direction, double...power);
 
     /**
      * SetDrivePower
      * Associates powers with corresponding motors
      * @autonomous
-     * @param powers
+     * @param direction
+     * @param power
      * TODO: Fix declaration
      */
-    //public void SetDrivePower(double...powers);
+    //public void SetDrivePower(direction direction, double power);
 
     /**
      * Function to clear the motor encoders.
